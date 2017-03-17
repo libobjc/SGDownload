@@ -307,7 +307,6 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)dealloc
 {
-    NSLog(@"SGDownload release");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self invalidate];
 }
