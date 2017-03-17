@@ -45,7 +45,19 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
-    return [[self alloc] initWithIdentifier:identifier];
+    static NSMutableArray <SGDownload *> * downloads = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        downloads = [NSMutableArray array];
+    });
+    for (SGDownload * obj in downloads) {
+        if ([obj.identifier isEqualToString:identifier]) {
+            return obj;
+        }
+    }
+    SGDownload * obj = [[self alloc] initWithIdentifier:identifier];
+    [downloads addObject:obj];
+    return obj;
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
