@@ -14,6 +14,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, assign) BOOL destoryToken;
+@property (nonatomic, strong) NSCondition * condition;
 
 @end
 
@@ -43,6 +44,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
         if (!self->_tasks) {
             self->_tasks = [NSMutableArray array];
         }
+        self.condition = [[NSCondition alloc] init];
     }
     return self;
 }
@@ -64,8 +66,11 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)quit
 {
+    [self.condition lock];
     self.destoryToken = YES;
     [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
+    [self.condition broadcast];
+    [self.condition unlock];
 }
 
 @end
