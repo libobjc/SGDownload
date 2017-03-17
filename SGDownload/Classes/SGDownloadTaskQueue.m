@@ -14,6 +14,7 @@
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, assign) BOOL closed;
+@property (nonatomic, assign) BOOL paused;
 
 @end
 
@@ -60,14 +61,20 @@
 - (void)threadBlock
 {
     [self.condition lock];
-    [self.condition wait];
+    self.paused = YES;
+    while (self.paused) {
+        [self.condition wait];
+    }
     [self.condition unlock];
 }
 
 - (void)threadResume
 {
     [self.condition lock];
-    [self.condition signal];
+    if (self.paused) {
+        self.paused = NO;
+        [self.condition signal];
+    }
     [self.condition unlock];
 }
 
