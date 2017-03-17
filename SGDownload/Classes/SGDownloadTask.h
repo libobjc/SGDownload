@@ -8,6 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
+    SGDownloadTaskStateNone,
+    SGDownloadTaskStateWaiting,
+    SGDownloadTaskStateRunning,
+    SGDownloadTaskStateSuspend,
+    SGDownloadTaskStateFinished,
+    SGDownloadTaskStateCanceled,
+    SGDownloadTaskStateFaiulred,
+};
+
 @interface SGDownloadTask : NSObject
+
+@property (nonatomic, assign) SGDownloadTaskState state;
+
+@property (nonatomic, copy) NSURL * contentURL;
 
 @end
