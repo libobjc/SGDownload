@@ -10,6 +10,13 @@
 #import "SGDownloadTask.h"
 #import "SGDownloadTaskQueue.h"
 
+#import <TargetConditionals.h>
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#elif TARGET_OS_IOS || TARGET_OS_TV
+#import <UIKit/UIKit.h>
+#endif
+
 NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @interface SGDownload () <NSURLSessionDownloadDelegate>
@@ -46,6 +53,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     if (self = [super init]) {
         self->_identifier = identifier;
         [self setupOperation];
+        [self setupNotification];
     }
     return self;
 }
@@ -265,9 +273,31 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 }
 
 
+#pragma mark - Notification
+
+- (void)setupNotification
+{
+    NSNotificationName name = nil;
+#if TARGET_OS_OSX
+    name = NSApplicationWillTerminateNotification;
+#elif TARGET_OS_IOS || TARGET_OS_TV
+    name = UIApplicationWillTerminateNotification;
+#endif
+    if (name) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:name object:nil];
+    }
+}
+
+- (void)applicationWillTerminate
+{
+    [self invalidate];
+}
+
 - (void)dealloc
 {
     NSLog(@"SGDownload release");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self invalidate];
 }
 
 @end
