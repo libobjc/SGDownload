@@ -11,4 +11,5 @@
 FOUNDATION_EXPORT double SGDownloadVersionNumber;
 FOUNDATION_EXPORT const unsigned char SGDownloadVersionString[];
 
-
+#import <SGDownload/SGDownloadImp.h>
+#import <SGDownload/SGDownloadTask.h>

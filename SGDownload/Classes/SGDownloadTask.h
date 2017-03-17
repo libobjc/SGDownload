@@ -23,5 +23,17 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 @property (nonatomic, assign) SGDownloadTaskState state;
 
 @property (nonatomic, copy) NSURL * contentURL;
+@property (nonatomic, copy) NSURL * fileURL;
+
+@property (nonatomic, assign) int64_t bytesWritten;
+@property (nonatomic, assign) int64_t totalBytesWritten;
+@property (nonatomic, assign) int64_t totalBytesExpectedToWrite;
+
+// about resume
+@property (nonatomic, strong) NSData * resumeInfoData;
+@property (nonatomic, assign) int64_t resumeFileOffset;
+@property (nonatomic, assign) int64_t resumeExpectedTotalBytes;
+
+@property (nonatomic, strong) NSError * error;
 
 @end

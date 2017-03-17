@@ -12,8 +12,8 @@
 @interface SGDownloadTaskQueue ()
 
 @property (nonatomic, copy) NSString * archiverPath;
-@property (nonatomic, assign) BOOL destoryToken;
 @property (nonatomic, strong) NSCondition * condition;
+@property (nonatomic, assign) BOOL closed;
 
 @end
 
@@ -57,13 +57,27 @@
     return task;
 }
 
+- (void)threadBlock
+{
+    [self.condition lock];
+    [self.condition wait];
+    [self.condition unlock];
+}
+
+- (void)threadResume
+{
+    [self.condition lock];
+    [self.condition signal];
+    [self.condition unlock];
+}
+
 - (SGDownloadTask *)downloadTaskSync
 {
     [self.condition lock];
     SGDownloadTask * task;
     do {
         for (SGDownloadTask * obj in self.tasks) {
-            if (self.destoryToken) {
+            if (self.closed) {
                 [self.condition unlock];
                 return nil;
             }
@@ -94,7 +108,7 @@
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks
 {
     [self.condition lock];
-    if (self.destoryToken) {
+    if (self.closed) {
         [self.condition unlock];
         return;
     }
@@ -211,10 +225,10 @@
     [self.condition unlock];
 }
 
-- (void)quit
+- (void)terminate
 {
     [self.condition lock];
-    self.destoryToken = YES;
+    self.closed = YES;
     for (SGDownloadTask * task in self.tasks) {
         switch (task.state) {
             case SGDownloadTaskStateRunning:
