@@ -24,10 +24,14 @@ extern NSString * const SGDownloadDefaultIdentifier;
 
 @property (nonatomic, copy, readonly) NSString * identifier;
 
+@property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;
+
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;    // if return nil, there is no task of the contentURL;
 
 - (void)downloadTask:(SGDownloadTask *)task;
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks;
+
+- (void)quit;
 
 @end
 
