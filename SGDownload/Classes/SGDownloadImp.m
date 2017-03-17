@@ -20,6 +20,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) NSURLSession * session;
 @property (nonatomic, strong) NSOperationQueue * sessionDelegateQueue;
 
+@property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, assign) SGDownloadTask * currentDownloadTask;
 @property (nonatomic, assign) NSURLSessionDownloadTask * currrentSessionTask;
@@ -52,6 +53,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 - (void)setupOperation
 {
     self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
+    self.condition = [[NSCondition alloc] init];
     
     self.sessionDelegateQueue = [[NSOperationQueue alloc] init];
     self.sessionDelegateQueue.maxConcurrentOperationCount = 1;
@@ -93,15 +95,13 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 {
     self.closed = YES;
     
-    [self.taskQueue terminate];
     if (self.currentDownloadTask && self.currrentSessionTask) {
         [self cancelCurrentSessionTaskResume:YES];
     }
+    [self.taskQueue terminate];
     [self.session invalidateAndCancel];
     [self.downloadOperationQueue cancelAllOperations];
     self.downloadOperation = nil;
-    self.currentDownloadTask = nil;
-    self.currrentSessionTask = nil;
 }
 
 
@@ -167,7 +167,10 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)cancelTask:(SGDownloadTask *)task
 {
-    [self cancelTask:task];
+    [self.taskQueue cancelTask:task];
+    if (self.currentDownloadTask == task) {
+        [self cancelCurrentSessionTaskResume:NO];
+    }
 }
 
 - (void)cancelTasks:(NSArray <SGDownloadTask *> *)tasks
@@ -180,10 +183,17 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)cancelCurrentSessionTaskResume:(BOOL)resume
 {
+    if (!self.currrentSessionTask) return;
     if (resume) {
+        [self.condition lock];
+        __weak typeof(self) weakSelf = self;
         [self.currrentSessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-            self.currentDownloadTask.resumeInfoData = resumeData;
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.currentDownloadTask.resumeInfoData = resumeData;
+            [strongSelf.condition signal];
         }];
+        [self.condition wait];
+        [self.condition unlock];
     } else {
         [self.currrentSessionTask cancel];
     }
@@ -233,12 +243,12 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 {
     if (self.currrentSessionTask == downloadTask) {
         self.currentDownloadTask.bytesWritten = bytesWritten;
-        self.currentDownloadTask.totalBytesWritten = totalBytesWritten + self.currentDownloadTask.resumeFileOffset;
-        self.currentDownloadTask.totalBytesExpectedToWrite = totalBytesExpectedToWrite + self.currentDownloadTask.resumeExpectedTotalBytes;
+        self.currentDownloadTask.totalBytesWritten = totalBytesWritten;
+        self.currentDownloadTask.totalBytesExpectedToWrite = totalBytesExpectedToWrite;
         if ([self.delegate respondsToSelector:@selector(download:task:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)]) {
             [self.delegate download:self
                                task:self.currentDownloadTask
-                       didWriteData:bytesWritten
+                       didWriteData:self.currentDownloadTask.bytesWritten
                   totalBytesWritten:self.currentDownloadTask.totalBytesWritten
           totalBytesExpectedToWrite:self.currentDownloadTask.totalBytesExpectedToWrite];
         }

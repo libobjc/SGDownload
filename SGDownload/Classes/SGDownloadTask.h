@@ -20,8 +20,11 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 
 @interface SGDownloadTask : NSObject
 
++ (instancetype)taskWithTitle:(NSString *)title contentURL:(NSURL *)contentURL fileURL:(NSURL *)fileURL;
+
 @property (nonatomic, assign) SGDownloadTaskState state;
 
+@property (nonatomic, copy) NSString * title;
 @property (nonatomic, copy) NSURL * contentURL;
 @property (nonatomic, copy) NSURL * fileURL;
 
