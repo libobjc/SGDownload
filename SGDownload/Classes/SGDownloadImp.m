@@ -91,14 +91,15 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     }
 }
 
-- (void)terminate
+- (void)invalidate
 {
-    self.closed = YES;
+    if (self.closed) return;
     
+    self.closed = YES;
     if (self.currentDownloadTask && self.currrentSessionTask) {
         [self cancelCurrentSessionTaskResume:YES];
     }
-    [self.taskQueue terminate];
+    [self.taskQueue invalidate];
     [self.session invalidateAndCancel];
     [self.downloadOperationQueue cancelAllOperations];
     self.downloadOperation = nil;

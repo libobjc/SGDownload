@@ -225,8 +225,10 @@
     [self.condition unlock];
 }
 
-- (void)terminate
+- (void)invalidate
 {
+    if (self.closed) return;
+    
     [self.condition lock];
     self.closed = YES;
     for (SGDownloadTask * task in self.tasks) {

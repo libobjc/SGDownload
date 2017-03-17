@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cancelTask:(SGDownloadTask *)task;
 - (void)cancelTasks:(NSArray<SGDownloadTask *> *)tasks;
 
-- (void)terminate;
+- (void)invalidate;
 
 @end
 
