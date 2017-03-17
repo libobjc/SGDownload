@@ -10,6 +10,18 @@
 		9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; };
+		9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; };
+		9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; };
+		9C71838F1E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */; };
+		9C7183901E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */; };
+		9C7183911E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */; };
+		9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */; };
+		9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */; };
+		9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */; };
+		9C7183971E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */; };
+		9C7183981E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */; };
+		9C7183991E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +30,10 @@
 		9C57A98C1E7BBD0F0085C9D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C57A99C1E7BBD770085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C57A9A71E7BBD780085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadImp.h; sourceTree = "<group>"; };
+		9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadImp.m; sourceTree = "<group>"; };
+		9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTask.h; sourceTree = "<group>"; };
+		9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +84,20 @@
 			children = (
 				9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */,
 				9C57A98C1E7BBD0F0085C9D4 /* Info.plist */,
+				9C7183891E7BBEAE0062E6F4 /* Classes */,
 			);
 			path = SGDownload;
+			sourceTree = "<group>";
+		};
+		9C7183891E7BBEAE0062E6F4 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */,
+				9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */,
+				9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */,
+				9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,6 +108,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */,
+				9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
+				9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +118,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */,
+				9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
+				9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +128,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */,
+				9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
+				9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +260,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C7183971E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
+				9C71838F1E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +269,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C7183981E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
+				9C7183901E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +278,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C7183991E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
+				9C7183911E7BBEC20062E6F4 /* SGDownloadImp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
