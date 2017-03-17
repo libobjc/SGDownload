@@ -230,7 +230,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    if (self.currrentSessionTask == task) {
+    if (self.currrentSessionTask == task || self.currentDownloadTask.state == SGDownloadTaskStateRunning) {
         if (error) {
             if (error.code == NSURLErrorCancelled) {
                 self.currentDownloadTask.state = SGDownloadTaskStateSuspend;
