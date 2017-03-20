@@ -38,6 +38,8 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @implementation SGDownload
 
+static NSMutableArray <SGDownload *> * downloads = nil;
+
 + (instancetype)download
 {
     return [self downloadWithIdentifier:SGDownloadDefaultIdentifier];
@@ -45,7 +47,6 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
-    static NSMutableArray <SGDownload *> * downloads = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         downloads = [NSMutableArray array];
@@ -123,6 +124,8 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     [self.session invalidateAndCancel];
     [self.downloadOperationQueue cancelAllOperations];
     self.downloadOperation = nil;
+    
+    [downloads removeObject:self];
 }
 
 
