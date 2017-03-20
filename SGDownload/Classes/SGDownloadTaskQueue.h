@@ -20,9 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;
 
-- (void)threadBlock;
-- (void)threadResume;
-
 - (nullable SGDownloadTask *)downloadTaskSync;
 - (void)downloadTask:(SGDownloadTask *)task;
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks;

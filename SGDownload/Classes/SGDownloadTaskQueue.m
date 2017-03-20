@@ -14,7 +14,6 @@
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, assign) BOOL closed;
-@property (nonatomic, assign) BOOL paused;
 
 @end
 
@@ -58,26 +57,6 @@
     return task;
 }
 
-- (void)threadBlock
-{
-    [self.condition lock];
-    self.paused = YES;
-    while (self.paused) {
-        [self.condition wait];
-    }
-    [self.condition unlock];
-}
-
-- (void)threadResume
-{
-    [self.condition lock];
-    if (self.paused) {
-        self.paused = NO;
-        [self.condition signal];
-    }
-    [self.condition unlock];
-}
-
 - (SGDownloadTask *)downloadTaskSync
 {
     [self.condition lock];
@@ -114,32 +93,27 @@
 
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks
 {
+    if (tasks.count <= 0) return;
     [self.condition lock];
     if (self.closed) {
         [self.condition unlock];
         return;
     }
-    int signalCount = 0;
     for (SGDownloadTask * obj in tasks) {
         if (![self.tasks containsObject:obj]) {
             [self.tasks addObject:obj];
-            signalCount++;
-        } else {
-            switch (obj.state) {
-                case SGDownloadTaskStateNone:
-                case SGDownloadTaskStateSuspend:
-                case SGDownloadTaskStateCanceled:
-                case SGDownloadTaskStateFaiulred:
-                    obj.state = SGDownloadTaskStateWaiting;
-                    signalCount++;
-                    break;
-                default:
-                    break;
-            }
         }
-    }
-    for (int i = 0; i < signalCount; i++) {
-        [self.condition signal];
+        switch (obj.state) {
+            case SGDownloadTaskStateNone:
+            case SGDownloadTaskStateSuspend:
+            case SGDownloadTaskStateCanceled:
+            case SGDownloadTaskStateFaiulred:
+                obj.state = SGDownloadTaskStateWaiting;
+                [self.condition signal];
+                break;
+            default:
+                break;
+        }
     }
     [self.condition unlock];
 }
@@ -159,6 +133,10 @@
 - (void)resumeTasks:(NSArray<SGDownloadTask *> *)tasks
 {
     [self.condition lock];
+    if (self.closed) {
+        [self.condition unlock];
+        return;
+    }
     for (SGDownloadTask * task in tasks) {
         switch (task.state) {
             case SGDownloadTaskStateNone:
@@ -190,6 +168,10 @@
 - (void)suspendTasks:(NSArray<SGDownloadTask *> *)tasks
 {
     [self.condition lock];
+    if (self.closed) {
+        [self.condition unlock];
+        return;
+    }
     for (SGDownloadTask * task in tasks) {
         switch (task.state) {
             case SGDownloadTaskStateNone:
@@ -219,6 +201,10 @@
 - (void)cancelTasks:(NSArray<SGDownloadTask *> *)tasks
 {
     [self.condition lock];
+    if (self.closed) {
+        [self.condition unlock];
+        return;
+    }
     NSMutableArray <SGDownloadTask *> * temp = [NSMutableArray array];
     for (SGDownloadTask * task in tasks) {
         if ([self.tasks containsObject:task]) {

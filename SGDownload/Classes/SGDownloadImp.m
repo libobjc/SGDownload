@@ -28,6 +28,8 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) NSOperationQueue * sessionDelegateQueue;
 
 @property (nonatomic, strong) NSCondition * condition;
+@property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
+
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, assign) SGDownloadTask * currentDownloadTask;
 @property (nonatomic, assign) NSURLSessionDownloadTask * currrentSessionTask;
@@ -75,6 +77,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 {
     self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
     self.condition = [[NSCondition alloc] init];
+    self.concurrentSemaphore = dispatch_semaphore_create(0);
     
     self.sessionDelegateQueue = [[NSOperationQueue alloc] init];
     self.sessionDelegateQueue.maxConcurrentOperationCount = 1;
@@ -108,7 +111,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             self.currrentSessionTask = [self.session downloadTaskWithURL:self.currentDownloadTask.contentURL];
         }
         [self.currrentSessionTask resume];
-        [self.taskQueue threadBlock];
+        dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
     }
 }
 
@@ -124,6 +127,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     [self.session invalidateAndCancel];
     [self.downloadOperationQueue cancelAllOperations];
     self.downloadOperation = nil;
+    dispatch_semaphore_signal(self.concurrentSemaphore);
     
     [downloads removeObject:self];
 }
@@ -251,7 +255,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             }
         }
     }
-    [self.taskQueue threadResume];
+    dispatch_semaphore_signal(self.concurrentSemaphore);
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
@@ -312,6 +316,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self invalidate];
+    NSLog(@"SGDownload release");
 }
 
 @end
