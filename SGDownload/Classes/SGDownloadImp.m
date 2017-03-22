@@ -70,7 +70,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         self->_identifier = identifier;
         self->_sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
         self.maxConcurrentOperationCount = 1;
-        
+        self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
+        self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
+        [self setupNotification];
     }
     return self;
 }
@@ -78,13 +80,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)startRunning
 {
     [self setupOperation];
-    [self setupNotification];
 }
 
 - (void)setupOperation
 {
-    self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
-    self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
     long count;
     if (self.maxConcurrentOperationCount <= 0) {
         count = 0;
