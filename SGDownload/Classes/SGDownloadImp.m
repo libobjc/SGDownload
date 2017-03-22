@@ -34,7 +34,6 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
 
-@property (nonatomic, assign) BOOL didPrepareResumeData;
 @property (nonatomic, assign) BOOL closed;
 
 @end
@@ -106,7 +105,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     self.downloadOperationQueue.qualityOfService = NSQualityOfServiceUserInteractive;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.didPrepareResumeData = YES;
         [self.downloadOperationQueue addOperation:self.downloadOperation];
     });
 }
@@ -254,11 +252,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
-    if (self.didPrepareResumeData)
+    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:(NSURLSessionDownloadTask *)task];
+    if (tuple)
     {
-        SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:(NSURLSessionDownloadTask *)task];
-        if (!tuple) return;
-        
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
