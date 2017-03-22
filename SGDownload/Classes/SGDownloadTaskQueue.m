@@ -47,7 +47,6 @@
 - (void)resetQueue
 {
     [self.condition lock];
-    SGDownloadTask * task = nil;
     for (SGDownloadTask * obj in self.tasks) {
         if (obj.state == SGDownloadTaskStateRunning) {
             obj.state = SGDownloadTaskStateWaiting;
