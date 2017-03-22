@@ -20,7 +20,7 @@
 - (NSArray <SGDownloadTuple *> *)tuplesWithSessionTasks:(NSArray <NSURLSessionDownloadTask *> *)sessionTasks;
 
 - (void)addTuple:(SGDownloadTuple *)tuple;
-- (void)finishTuple:(SGDownloadTuple *)tuple;
+- (void)removeTuple:(SGDownloadTuple *)tuple;
 - (void)removeTuples:(NSArray <SGDownloadTuple *> *)tuples;
 
 - (void)cancelDownloadTask:(SGDownloadTask *)downloadTask resume:(BOOL)resume completionHandler:(void(^)(SGDownloadTuple * tuple))completionHandler;

@@ -263,11 +263,12 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         }
     } else {
         tuple.downlaodTask.state = SGDownloadTaskStateFinished;
-        [self.taskTupleQueue finishTuple:tuple];
+        
         if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
             [self.delegate download:self taskDidFinished:tuple.downlaodTask];
         }
     }
+    [self.taskTupleQueue removeTuple:tuple];
     NSLog(@"唤醒 dispatch_semaphore_signal");
     dispatch_semaphore_signal(self.concurrentSemaphore);
     NSLog(@"唤醒 dispatch_semaphore_signal 完成");

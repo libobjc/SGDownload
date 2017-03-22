@@ -100,7 +100,7 @@
     [self.tupleLock unlock];
 }
 
-- (void)finishTuple:(SGDownloadTuple *)tuple
+- (void)removeTuple:(SGDownloadTuple *)tuple
 {
     if (tuple) {
         [self removeTuples:@[tuple]];
@@ -177,7 +177,6 @@
         }
         dispatch_queue_t queue = [[NSOperationQueue currentQueue] underlyingQueue];
         dispatch_group_notify(group, queue, ^{
-            [self removeTuples:tuples];
             if (completionHandler) {
                 completionHandler(tuples);
                 NSLog(@"取消 完成");
@@ -187,7 +186,6 @@
         for (SGDownloadTuple * obj in tuples) {
             [obj.sessionTask cancel];
         }
-        [self removeTuples:tuples];
         if (completionHandler) {
             completionHandler(tuples);
             NSLog(@"取消 完成");
