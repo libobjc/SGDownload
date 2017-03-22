@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9C27B3101E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; };
-		9C27B3111E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; };
-		9C27B3121E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; };
+		9C27B3101E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C27B3111E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C27B3121E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C27B30E1E824C5100BB15E4 /* SGDownloadConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C27B3131E824C5100BB15E4 /* SGDownloadConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C27B30F1E824C5100BB15E4 /* SGDownloadConfiguration.m */; };
 		9C27B3141E824C5100BB15E4 /* SGDownloadConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C27B30F1E824C5100BB15E4 /* SGDownloadConfiguration.m */; };
 		9C27B3151E824C5100BB15E4 /* SGDownloadConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C27B30F1E824C5100BB15E4 /* SGDownloadConfiguration.m */; };
@@ -147,9 +147,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C27B3101E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9CF24DB81E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC01E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
-				9C27B3101E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
 				9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C71839D1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
@@ -161,9 +161,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C27B3111E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9CF24DB91E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC11E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
-				9C27B3111E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
 				9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C71839E1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
@@ -175,9 +175,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C27B3121E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9CF24DBA1E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC21E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
-				9C27B3121E824C5100BB15E4 /* SGDownloadConfiguration.h in Headers */,
 				9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
 				9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C71839F1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,

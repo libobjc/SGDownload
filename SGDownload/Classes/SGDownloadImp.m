@@ -48,35 +48,30 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
-    return [self downloadWithConfiguration:[SGDownloadConfiguration defaultConfiguration] identifier:identifier];
+    return [self downloadWithConfiguration:[SGDownloadConfiguration defaultConfigurationWithDownloadIdentifier:identifier]];
 }
 
 + (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration
-{
-    return [self downloadWithConfiguration:configuration identifier:SGDownloadDefaultIdentifier];
-}
-
-+ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         downloads = [NSMutableArray array];
     });
     for (SGDownload * obj in downloads) {
-        if ([obj.identifier isEqualToString:identifier]) {
+        if ([obj.identifier isEqualToString:configuration.downloadIdentifier]) {
             return obj;
         }
     }
-    SGDownload * obj = [[self alloc] initWithConfiguration:configuration identifier:identifier];
+    SGDownload * obj = [[self alloc] initWithConfiguration:configuration];
     [downloads addObject:obj];
     return obj;
 }
 
-- (instancetype)initWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier
+- (instancetype)initWithConfiguration:(SGDownloadConfiguration *)configuration
 {
     if (self = [super init]) {
         self->_configuration = configuration;
-        self->_identifier = identifier;
+        self->_identifier = configuration.downloadIdentifier;
         [self setupOperation];
         [self setupNotification];
     }
@@ -252,6 +247,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (!tuple) return;
     
     if (error) {
+        NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
+        if (resumeData) {
+            tuple.downlaodTask.resumeInfoData = resumeData;
+        }
         if (error.code == NSURLErrorCancelled) {
             tuple.downlaodTask.state = SGDownloadTaskStateSuspend;
         } else {
@@ -261,12 +260,14 @@ static NSMutableArray <SGDownload *> * downloads = nil;
                 [self.delegate download:self task:tuple.downlaodTask didFailuredWithError:error];
             }
         }
+        NSLog(@"下载失败 %@", tuple.downlaodTask.title);
     } else {
         tuple.downlaodTask.state = SGDownloadTaskStateFinished;
         
         if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
             [self.delegate download:self taskDidFinished:tuple.downlaodTask];
         }
+        NSLog(@"下载完成 %@", tuple.downlaodTask.title);
     }
     [self.taskTupleQueue removeTuple:tuple];
     NSLog(@"唤醒 dispatch_semaphore_signal");

@@ -13,3 +13,4 @@ FOUNDATION_EXPORT const unsigned char SGDownloadVersionString[];
 
 #import <SGDownload/SGDownloadImp.h>
 #import <SGDownload/SGDownloadTask.h>
+#import <SGDownload/SGDownloadConfiguration.h>

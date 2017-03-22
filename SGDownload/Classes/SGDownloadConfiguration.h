@@ -11,7 +11,12 @@
 @interface SGDownloadConfiguration : NSObject
 
 + (instancetype)defaultConfiguration;
++ (instancetype)backgroundConfiguration;
 
++ (instancetype)defaultConfigurationWithDownloadIdentifier:(NSString *)downloadIdentifier;
++ (instancetype)backgroundConfigurationWithDownloadIdentifier:(NSString *)downloadIdentifier;
+
+@property (nonatomic, copy) NSString * downloadIdentifier;
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;               // defalut is 1.
 @property (nonatomic, strong) NSURLSessionConfiguration * sessionConfiguration;     // default is default NSURLSessionConfiguration.
 @property (nonatomic, strong) NSOperationQueue * delegateQueue;                     // default is a new operation queue.

@@ -30,9 +30,7 @@ extern NSString * const SGDownloadDefaultIdentifier;
 
 + (instancetype)download;    // default download manager and default configuration.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
-
 + (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration;    // default download manager.
-+ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier;
 
 @property (nonatomic, strong, readonly) SGDownloadConfiguration * configuration;
 @property (nonatomic, copy, readonly) NSString * identifier;
