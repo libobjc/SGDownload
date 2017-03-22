@@ -305,16 +305,22 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
+    SGDownloadTask * obj = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
-    if (!tuple) return;
+    if (tuple) {
+        obj = tuple.downloadTask;
+    } else {
+        obj = [self.taskQueue taskWithContentURL:downloadTask.currentRequest.URL];
+    }
+    if (!obj) return;
     
     NSError * error;
-    [[NSFileManager defaultManager] moveItemAtURL:location toURL:tuple.downloadTask.fileURL error:&error];
-    tuple.downloadTask.error = error;
+    [[NSFileManager defaultManager] moveItemAtURL:location toURL:obj.fileURL error:&error];
+    obj.error = error;
     if (error) {
         NSLog(@"完成 移动失败 : %@", error);
     } else {
-        NSLog(@"完成 : %@", tuple.downloadTask.fileURL);
+        NSLog(@"完成 : %@", obj.fileURL);
     }
 }
 
