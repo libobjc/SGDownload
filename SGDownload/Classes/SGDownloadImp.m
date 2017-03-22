@@ -11,7 +11,6 @@
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
 #import "SGDownloadTupleQueue.h"
-#import "SGDownloadConfiguration.h"
 
 #import <TargetConditionals.h>
 #if TARGET_OS_OSX
@@ -31,6 +30,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
 @property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
 
+@property (nonatomic, strong) NSOperationQueue * delegateQueue;
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
 
@@ -50,34 +50,35 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
-    return [self downloadWithConfiguration:[SGDownloadConfiguration defaultConfigurationWithDownloadIdentifier:identifier]];
-}
-
-+ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration
-{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         downloads = [NSMutableArray array];
     });
     for (SGDownload * obj in downloads) {
-        if ([obj.identifier isEqualToString:configuration.downloadIdentifier]) {
+        if ([obj.identifier isEqualToString:identifier]) {
             return obj;
         }
     }
-    SGDownload * obj = [[self alloc] initWithConfiguration:configuration];
+    SGDownload * obj = [[self alloc] initWithIdentifier:identifier];
     [downloads addObject:obj];
     return obj;
 }
 
-- (instancetype)initWithConfiguration:(SGDownloadConfiguration *)configuration
+- (instancetype)initWithIdentifier:(NSString *)identifier
 {
     if (self = [super init]) {
-        self->_configuration = configuration;
-        self->_identifier = configuration.downloadIdentifier;
-        [self setupOperation];
-        [self setupNotification];
+        self->_identifier = identifier;
+        self->_sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
+        self.maxConcurrentOperationCount = 1;
+        
     }
     return self;
+}
+
+- (void)startRunning
+{
+    [self setupOperation];
+    [self setupNotification];
 }
 
 - (void)setupOperation
@@ -85,16 +86,20 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
     self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
     long count;
-    if (self.configuration.maxConcurrentOperationCount <= 0) {
+    if (self.maxConcurrentOperationCount <= 0) {
         count = 0;
     } else {
-        count = self.configuration.maxConcurrentOperationCount - 1;
+        count = self.maxConcurrentOperationCount - 1;
     }
     self.concurrentSemaphore = dispatch_semaphore_create(count);
     
-    self.session = [NSURLSession sessionWithConfiguration:self.configuration.sessionConfiguration
+    self.delegateQueue = [[NSOperationQueue alloc] init];
+    self.delegateQueue.maxConcurrentOperationCount = 1;
+    self.delegateQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+    
+    self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration
                                                  delegate:self
-                                            delegateQueue:self.configuration.delegateQueue];
+                                            delegateQueue:self.delegateQueue];
     
     self.downloadOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(downloadOperationHandler) object:nil];
     self.downloadOperationQueue = [[NSOperationQueue alloc] init];
@@ -140,7 +145,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
 }
 
-- (void)invalidate
+- (void)stopRunning
 {
     if (self.closed) return;
     
@@ -368,7 +373,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self invalidate];
+    [self stopRunning];
     NSLog(@"SGDownload release");
 }
 

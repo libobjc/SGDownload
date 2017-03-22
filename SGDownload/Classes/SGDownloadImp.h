@@ -28,14 +28,15 @@ extern NSString * const SGDownloadDefaultIdentifier;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-+ (instancetype)download;    // default download manager and default configuration.
++ (instancetype)download;    // default download manager.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
-+ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration;    // default download manager.
 
-@property (nonatomic, strong, readonly) SGDownloadConfiguration * configuration;
 @property (nonatomic, copy, readonly) NSString * identifier;
+@property (nonatomic, strong, readonly) NSURLSessionConfiguration * sessionConfiguration;
 
 @property (nonatomic, weak) id <SGDownloadDelegate> delegate;
+@property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
+
 @property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;    // if return nil, there is no task of the contentURL;
@@ -55,9 +56,9 @@ extern NSString * const SGDownloadDefaultIdentifier;
 - (void)cancelTask:(SGDownloadTask *)task;
 - (void)cancelTasks:(NSArray <SGDownloadTask *> *)tasks;
 
+- (void)startRunning;
+- (void)stopRunning;
 - (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
-
-- (void)invalidate;
 
 @end
 
