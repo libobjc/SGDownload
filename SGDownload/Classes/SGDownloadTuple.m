@@ -18,7 +18,7 @@
 - (instancetype)initWithDownloadTask:(SGDownloadTask *)downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask
 {
     if (self = [super init]) {
-        self.downlaodTask = downloadTask;
+        self.downloadTask = downloadTask;
         self.sessionTask = sessionTask;
     }
     return self;

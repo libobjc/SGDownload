@@ -13,7 +13,6 @@
 @interface SGDownloadTupleQueue ()
 
 @property (nonatomic, strong) NSLock * tupleLock;
-@property (nonatomic, strong) NSCondition * cancelSyncCondition;
 
 @end
 
@@ -24,7 +23,6 @@
     if (self = [super init]) {
         self->_tuples = [NSMutableArray array];
         self.tupleLock = [[NSLock alloc] init];
-        self.cancelSyncCondition = [[NSCondition alloc] init];
     }
     return self;
 }
@@ -34,7 +32,7 @@
     [self.tupleLock lock];
     SGDownloadTuple * tuple = nil;
     for (SGDownloadTuple * obj in self.tuples) {
-        if (obj.downlaodTask == downloadTask) {
+        if (obj.downloadTask == downloadTask) {
             tuple = obj;
             break;
         }
@@ -48,7 +46,7 @@
     [self.tupleLock lock];
     NSMutableArray * temp = [NSMutableArray array];
     for (SGDownloadTuple * obj in self.tuples) {
-        if ([downloadTasks containsObject:obj.downlaodTask]) {
+        if ([downloadTasks containsObject:obj.downloadTask]) {
             [temp addObject:obj];
         }
     }
@@ -171,7 +169,7 @@
         for (SGDownloadTuple * obj in tuples) {
             dispatch_group_enter(group);
             [obj.sessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-                obj.downlaodTask.resumeInfoData = resumeData;
+                obj.downloadTask.resumeInfoData = resumeData;
                 dispatch_group_leave(group);
             }];
         }
@@ -192,36 +190,6 @@
         }
     }
     [self.tupleLock unlock];
-}
-
-- (void)cancelAllResumeSync
-{
-    [self.tupleLock lock];
-    if (self.tuples.count <= 0) {
-        [self.tupleLock unlock];
-        return;
-    }
-    
-    dispatch_group_t group = dispatch_group_create();
-    for (SGDownloadTuple * obj in self.tuples) {
-        dispatch_group_enter(group);
-        [obj.sessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-            obj.downlaodTask.resumeInfoData = resumeData;
-            dispatch_group_leave(group);
-        }];
-    }
-    dispatch_queue_t queue = dispatch_queue_create("cancelAllResumeSync", NULL);
-    dispatch_group_notify(group, queue, ^{
-        [self.cancelSyncCondition lock];
-        [self.cancelSyncCondition signal];
-        [self.cancelSyncCondition unlock];
-    });
-    
-    [self.tupleLock unlock];
-    [self.cancelSyncCondition lock];
-    [self.cancelSyncCondition wait];
-    [self.cancelSyncCondition unlock];
-    [self removeTuples:self.tuples];
 }
 
 - (void)dealloc

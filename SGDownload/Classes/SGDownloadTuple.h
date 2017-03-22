@@ -13,7 +13,7 @@
 
 + (instancetype)tupleWithDownloadTask:(SGDownloadTask *)downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask;
 
-@property (nonatomic, strong) SGDownloadTask * downlaodTask;
+@property (nonatomic, strong) SGDownloadTask * downloadTask;
 @property (nonatomic, strong) NSURLSessionDownloadTask * sessionTask;
 
 @end

@@ -39,8 +39,21 @@
             self->_tasks = [NSMutableArray array];
         }
         self.condition = [[NSCondition alloc] init];
+        [self resetQueue];
     }
     return self;
+}
+
+- (void)resetQueue
+{
+    [self.condition lock];
+    SGDownloadTask * task = nil;
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == SGDownloadTaskStateRunning) {
+            obj.state = SGDownloadTaskStateWaiting;
+        }
+    }
+    [self.condition unlock];
 }
 
 - (SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL
