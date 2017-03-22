@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 @class SGDownload;
 @class SGDownloadTask;
-@class SGDownloadConfiguration;
 
 NS_ASSUME_NONNULL_BEGIN
 
