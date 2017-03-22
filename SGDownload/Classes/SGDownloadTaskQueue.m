@@ -99,6 +99,7 @@
         [self.condition unlock];
         return;
     }
+    BOOL needSignal = NO;
     for (SGDownloadTask * obj in tasks) {
         if (![self.tasks containsObject:obj]) {
             [self.tasks addObject:obj];
@@ -109,11 +110,14 @@
             case SGDownloadTaskStateCanceled:
             case SGDownloadTaskStateFaiulred:
                 obj.state = SGDownloadTaskStateWaiting;
-                [self.condition signal];
+                needSignal = YES;
                 break;
             default:
                 break;
         }
+    }
+    if (needSignal) {
+        [self.condition signal];
     }
     [self.condition unlock];
 }
@@ -137,6 +141,7 @@
         [self.condition unlock];
         return;
     }
+    BOOL needSignal = NO;
     for (SGDownloadTask * task in tasks) {
         switch (task.state) {
             case SGDownloadTaskStateNone:
@@ -144,11 +149,14 @@
             case SGDownloadTaskStateCanceled:
             case SGDownloadTaskStateFaiulred:
                 task.state = SGDownloadTaskStateWaiting;
-                [self.condition signal];
+                needSignal = YES;
                 break;
             default:
                 break;
         }
+    }
+    if (needSignal) {
+        [self.condition signal];
     }
     [self.condition unlock];
 }
@@ -218,6 +226,13 @@
     [self.condition unlock];
 }
 
+- (void)archive
+{
+    [self.condition lock];
+    [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
+    [self.condition unlock];
+}
+
 - (void)invalidate
 {
     if (self.closed) return;
@@ -233,7 +248,6 @@
                 break;
         }
     }
-    [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
     [self.condition broadcast];
     [self.condition unlock];
 }
