@@ -252,4 +252,9 @@
     [self.condition unlock];
 }
 
+- (void)dealloc
+{
+    NSLog(@"SGDownloadTaskQueue release");
+}
+
 @end

@@ -73,4 +73,9 @@
     self.resumeExpectedTotalBytes = 0;
 }
 
+- (void)dealloc
+{
+    NSLog(@"SGDownloadTask release");
+}
+
 @end

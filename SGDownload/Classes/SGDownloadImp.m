@@ -100,10 +100,12 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (self.closed) {
                 break;
             }
+            NSLog(@"调用 downloadTaskSync");
             SGDownloadTask * downloadTask = [self.taskQueue downloadTaskSync];
             if (!downloadTask) {
                 break;
             }
+            NSLog(@"调用 downloadTaskSync 完成");
             downloadTask.state = SGDownloadTaskStateRunning;
             
             NSURLSessionDownloadTask * sessionTask = nil;
@@ -115,7 +117,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:sessionTask];
             [self.taskTupleQueue addTuple:tuple];
             [sessionTask resume];
+            NSLog(@"等待 dispatch_semaphore_wait");
             dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
+            NSLog(@"等待 dispatch_semaphore_wait 完成");
         }
     }
 }
@@ -235,7 +239,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         }
     }
     [self.taskTupleQueue removeTuple:tuple];
+    NSLog(@"唤醒 dispatch_semaphore_signal");
     dispatch_semaphore_signal(self.concurrentSemaphore);
+    NSLog(@"唤醒 dispatch_semaphore_signal 完成");
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
@@ -246,6 +252,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     NSError * error;
     [[NSFileManager defaultManager] moveItemAtURL:location toURL:tuple.downlaodTask.fileURL error:&error];
     tuple.downlaodTask.error = error;
+    NSLog(@"完成 : %@", tuple.downlaodTask.fileURL);
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
