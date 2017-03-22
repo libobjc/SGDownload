@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @class SGDownload;
 @class SGDownloadTask;
+@class SGDownloadConfiguration;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,9 +28,13 @@ extern NSString * const SGDownloadDefaultIdentifier;
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-+ (instancetype)download;    // default download manager.
++ (instancetype)download;    // default download manager and default configuration.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
 
++ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration;    // default download manager.
++ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier;
+
+@property (nonatomic, strong, readonly) SGDownloadConfiguration * configuration;
 @property (nonatomic, copy, readonly) NSString * identifier;
 
 @property (nonatomic, weak) id <SGDownloadDelegate> delegate;

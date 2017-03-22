@@ -13,7 +13,7 @@
 @interface SGDownloadTupleQueue ()
 
 @property (nonatomic, strong) NSLock * tupleLock;
-@property (nonatomic, strong) NSCondition * cancelCondition;
+@property (nonatomic, strong) NSCondition * cancelSyncCondition;
 
 @end
 
@@ -24,7 +24,7 @@
     if (self = [super init]) {
         self->_tuples = [NSMutableArray array];
         self.tupleLock = [[NSLock alloc] init];
-        self.cancelCondition = [[NSCondition alloc] init];
+        self.cancelSyncCondition = [[NSCondition alloc] init];
     }
     return self;
 }
@@ -100,11 +100,21 @@
     [self.tupleLock unlock];
 }
 
-- (void)removeTuple:(SGDownloadTuple *)tuple
+- (void)finishTuple:(SGDownloadTuple *)tuple
 {
+    if (tuple) {
+        [self removeTuples:@[tuple]];
+    }
+}
+
+- (void)removeTuples:(NSArray<SGDownloadTuple *> *)tuples
+{
+    if (tuples.count <= 0) return;
     [self.tupleLock lock];
-    if ([self.tuples containsObject:tuple]) {
-        [self.tuples removeObject:tuple];
+    for (SGDownloadTuple * obj in tuples) {
+        if ([self.tuples containsObject:obj]) {
+            [self.tuples removeObject:obj];
+        }
     }
     [self.tupleLock unlock];
 }
@@ -163,6 +173,8 @@
         }
         dispatch_queue_t queue = [[NSOperationQueue currentQueue] underlyingQueue];
         dispatch_group_notify(group, queue, ^{
+            [self.tupleLock unlock];
+            [self removeTuples:tuples];
             if (completionHandler) {
                 completionHandler(tuples);
                 NSLog(@"取消 完成");
@@ -172,12 +184,35 @@
         for (SGDownloadTuple * obj in tuples) {
             [obj.sessionTask cancel];
         }
+        [self.tupleLock unlock];
+        [self removeTuples:tuples];
         if (completionHandler) {
             completionHandler(tuples);
             NSLog(@"取消 完成");
         }
     }
+}
+
+- (void)cancelAllResumeSync
+{
+    [self.tupleLock lock];
+    if (self.tuples.count <= 0) {
+        [self.tupleLock unlock];
+        return;
+    }
+    for (SGDownloadTuple * obj in self.tuples) {
+        [obj.sessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+            obj.downlaodTask.resumeInfoData = resumeData;
+            [self.cancelSyncCondition lock];
+            [self.cancelSyncCondition signal];
+            [self.cancelSyncCondition unlock];
+        }];
+        [self.cancelSyncCondition lock];
+        [self.cancelSyncCondition wait];
+        [self.cancelSyncCondition unlock];
+    }
     [self.tupleLock unlock];
+    [self removeTuples:self.tuples];
 }
 
 - (void)dealloc

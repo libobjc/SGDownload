@@ -11,6 +11,7 @@
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
 #import "SGDownloadTupleQueue.h"
+#import "SGDownloadConfiguration.h"
 
 #import <TargetConditionals.h>
 #if TARGET_OS_OSX
@@ -23,15 +24,14 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @interface SGDownload () <NSURLSessionDownloadDelegate>
 
-@property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
-@property (nonatomic, strong) NSInvocationOperation * downloadOperation;
-
 @property (nonatomic, strong) NSURLSession * session;
-@property (nonatomic, strong) NSOperationQueue * sessionDelegateQueue;
 
-@property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
+@property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
+
+@property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
+@property (nonatomic, strong) NSInvocationOperation * downloadOperation;
 
 @property (nonatomic, assign) BOOL closed;
 
@@ -48,6 +48,16 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
+    return [self downloadWithConfiguration:[SGDownloadConfiguration defaultConfiguration] identifier:identifier];
+}
+
++ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration
+{
+    return [self downloadWithConfiguration:configuration identifier:SGDownloadDefaultIdentifier];
+}
+
++ (instancetype)downloadWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier
+{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         downloads = [NSMutableArray array];
@@ -57,14 +67,15 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             return obj;
         }
     }
-    SGDownload * obj = [[self alloc] initWithIdentifier:identifier];
+    SGDownload * obj = [[self alloc] initWithConfiguration:configuration identifier:identifier];
     [downloads addObject:obj];
     return obj;
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier
+- (instancetype)initWithConfiguration:(SGDownloadConfiguration *)configuration identifier:(NSString *)identifier
 {
     if (self = [super init]) {
+        self->_configuration = configuration;
         self->_identifier = identifier;
         [self setupOperation];
         [self setupNotification];
@@ -74,16 +85,19 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)setupOperation
 {
+    self.session = [NSURLSession sessionWithConfiguration:self.configuration.sessionConfiguration
+                                                 delegate:self
+                                            delegateQueue:self.configuration.delegateQueue];
+    
     self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
     self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
-    self.concurrentSemaphore = dispatch_semaphore_create(2);
-    
-    self.sessionDelegateQueue = [[NSOperationQueue alloc] init];
-    self.sessionDelegateQueue.maxConcurrentOperationCount = 1;
-    self.sessionDelegateQueue.qualityOfService = NSQualityOfServiceUserInteractive;
-    self.session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]
-                                                 delegate:self
-                                            delegateQueue:self.sessionDelegateQueue];
+    long count;
+    if (self.configuration.maxConcurrentOperationCount <= 0) {
+        count = 0;
+    } else {
+        count = self.configuration.maxConcurrentOperationCount - 1;
+    }
+    self.concurrentSemaphore = dispatch_semaphore_create(count);
     
     self.downloadOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(downloadOperationHandler) object:nil];
     self.downloadOperationQueue = [[NSOperationQueue alloc] init];
@@ -138,6 +152,21 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         dispatch_semaphore_signal(self.concurrentSemaphore);
         [downloads removeObject:self];
     }];
+}
+
+- (void)invalidateSync
+{
+    if (self.closed) return;
+    
+    self.closed = YES;
+    [self.taskQueue invalidate];
+    [self.taskTupleQueue cancelAllResumeSync];
+    [self.taskQueue archive];
+    [self.session invalidateAndCancel];
+    [self.downloadOperationQueue cancelAllOperations];
+    self.downloadOperation = nil;
+    dispatch_semaphore_signal(self.concurrentSemaphore);
+    [downloads removeObject:self];
 }
 
 
@@ -234,11 +263,11 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         }
     } else {
         tuple.downlaodTask.state = SGDownloadTaskStateFinished;
+        [self.taskTupleQueue finishTuple:tuple];
         if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
             [self.delegate download:self taskDidFinished:tuple.downlaodTask];
         }
     }
-    [self.taskTupleQueue removeTuple:tuple];
     NSLog(@"唤醒 dispatch_semaphore_signal");
     dispatch_semaphore_signal(self.concurrentSemaphore);
     NSLog(@"唤醒 dispatch_semaphore_signal 完成");
@@ -299,7 +328,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)applicationWillTerminate
 {
-    [self invalidate];
+    [self invalidateSync];
 }
 
 - (void)dealloc
