@@ -16,7 +16,6 @@
 
 #import <objc/message.h>
 
-#import <TargetConditionals.h>
 #if TARGET_OS_OSX
 #import <AppKit/AppKit.h>
 #elif TARGET_OS_IOS || TARGET_OS_TV

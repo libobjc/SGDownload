@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <TargetConditionals.h>
 @class SGDownload;
 @class SGDownloadTask;
 
@@ -29,7 +30,10 @@ extern NSString * const SGDownloadDefaultIdentifier;
 
 + (instancetype)download;    // default download manager.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
+
+#if TARGET_OS_IOS || TARGET_OS_TV
 + (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
+#endif
 
 @property (nonatomic, copy, readonly) NSString * identifier;
 @property (nonatomic, strong, readonly) NSURLSessionConfiguration * sessionConfiguration;
