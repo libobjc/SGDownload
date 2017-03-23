@@ -18,9 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)download:(SGDownload *)download taskStateDidChange:(SGDownloadTask *)task;
 - (void)download:(SGDownload *)download taskProgressDidChange:(SGDownloadTask *)task;
 
-- (void)downloadWillHandleLastTasks:(SGDownload *)download;
-- (void)downloadDidHandleLastTasks:(SGDownload *)download;
-
 @end
 
 extern NSString * const SGDownloadDefaultIdentifier;
