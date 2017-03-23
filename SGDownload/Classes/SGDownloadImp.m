@@ -137,7 +137,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
                 break;
             }
             dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
-            NSLog(@"开始下载新任务");
             SGDownloadTask * downloadTask = [self.taskQueue downloadTaskSync];
             if (!downloadTask) {
                 break;
@@ -154,7 +153,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             [self.taskTupleQueue addTuple:tuple];
             [sessionTask resume];
             [self.taskQueue archive];
-            NSLog(@"开始下载 : %@", downloadTask.title);
         }
     }
 }
@@ -260,7 +258,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    NSLog(@"%s", __func__);
     if (self.backgroundCompletionHandler) {
         self.backgroundCompletionHandler();
     }
@@ -314,7 +311,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
         if (!exists) {
             tuple.downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
-            NSLog(@"完成 移动失败 3");
             return;
         }
     }
@@ -326,11 +322,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     NSError * error;
     [[NSFileManager defaultManager] moveItemAtPath:path toPath:filePath error:&error];
     tuple.downloadTask.error = error;
-    if (error) {
-        NSLog(@"完成 移动失败 : %@", error);
-    } else {
-        NSLog(@"完成 : %@", filePath);
-    }
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
@@ -381,7 +372,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self invalidate];
-    NSLog(@"SGDownload release");
 }
 
 @end

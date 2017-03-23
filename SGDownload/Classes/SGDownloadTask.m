@@ -140,9 +140,4 @@
     }
 }
 
-- (void)dealloc
-{
-    NSLog(@"SGDownloadTask release");
-}
-
 @end

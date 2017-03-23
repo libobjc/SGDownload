@@ -24,9 +24,4 @@
     return self;
 }
 
-- (void)dealloc
-{
-    NSLog(@"SGDownloadTuple release");
-}
-
 @end

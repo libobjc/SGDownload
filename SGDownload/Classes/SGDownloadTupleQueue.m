@@ -156,7 +156,6 @@
 
 - (void)cancelTuples:(NSArray <SGDownloadTuple *> *)tuples resume:(BOOL)resume completionHandler:(void(^)(NSArray <SGDownloadTuple *> * tuples))completionHandler
 {
-    NSLog(@"取消");
     [self.tupleLock lock];
     if (tuples.count <= 0) {
         if (completionHandler) {
@@ -178,7 +177,6 @@
         dispatch_group_notify(group, queue, ^{
             if (completionHandler) {
                 completionHandler(tuples);
-                NSLog(@"取消 完成");
             }
         });
     } else {
@@ -187,15 +185,9 @@
         }
         if (completionHandler) {
             completionHandler(tuples);
-            NSLog(@"取消 完成");
         }
     }
     [self.tupleLock unlock];
-}
-
-- (void)dealloc
-{
-    NSLog(@"SGDownloadTupleQueue release");
 }
 
 @end
