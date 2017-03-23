@@ -70,7 +70,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         self->_identifier = identifier;
         self->_sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
         self.maxConcurrentOperationCount = 1;
-        self.taskQueue = [SGDownloadTaskQueue queueWithIdentifier:self.identifier];
+        self.taskQueue = [SGDownloadTaskQueue queueWithDownload:self];
         self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
         [self setupNotification];
     }

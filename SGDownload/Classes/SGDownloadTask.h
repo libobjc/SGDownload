@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class SGDownload;
 
 typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
     SGDownloadTaskStateNone,
@@ -21,6 +22,8 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 @interface SGDownloadTask : NSObject
 
 + (instancetype)taskWithTitle:(NSString *)title contentURL:(NSURL *)contentURL fileURL:(NSURL *)fileURL;
+
+@property (nonatomic, weak) SGDownload * download;
 
 @property (nonatomic, assign) SGDownloadTaskState state;
 

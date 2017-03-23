@@ -7,15 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+@class SGDownload;
 @class SGDownloadTask;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SGDownloadTaskQueue : NSObject
 
-+ (instancetype)queueWithIdentifier:(NSString *)identifier;
++ (instancetype)queueWithDownload:(SGDownload *)download;
 
-@property (nonatomic, copy, readonly) NSString * identifier;
+@property (nonatomic, weak, readonly) SGDownload * download;
 @property (nonatomic, strong, readonly) NSMutableArray <SGDownloadTask *> * tasks;
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;

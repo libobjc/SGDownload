@@ -7,6 +7,7 @@
 //
 
 #import "SGDownloadTaskQueue.h"
+#import "SGDownloadImp.h"
 #import "SGDownloadTask.h"
 
 @interface SGDownloadTaskQueue ()
@@ -19,9 +20,9 @@
 
 @implementation SGDownloadTaskQueue
 
-+ (instancetype)queueWithIdentifier:(NSString *)identifier
++ (instancetype)queueWithDownload:(SGDownload *)download
 {
-    return [[self alloc] initWithIdentifier:identifier];
+    return [[self alloc] queueWithDownload:download];
 }
 
 + (NSString *)archiverPathWithIdentifier:(NSString *)identifier
@@ -29,11 +30,11 @@
     return [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.SGDownloadArchiver", identifier]];
 }
 
-- (instancetype)initWithIdentifier:(NSString *)identifier
+- (instancetype)initWithDownload:(SGDownload *)download
 {
     if (self = [super init]) {
-        self->_identifier = identifier;
-        self->_archiverPath = [self.class archiverPathWithIdentifier:identifier];
+        self->_download = download;
+        self->_archiverPath = [self.class archiverPathWithIdentifier:download.identifier];
         self->_tasks = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archiverPath];
         if (!self->_tasks) {
             self->_tasks = [NSMutableArray array];
@@ -48,6 +49,7 @@
 {
     [self.condition lock];
     for (SGDownloadTask * obj in self.tasks) {
+        obj.download = self.download;
         if (obj.state == SGDownloadTaskStateRunning) {
             obj.state = SGDownloadTaskStateWaiting;
         }
@@ -114,6 +116,7 @@
     BOOL needSignal = NO;
     for (SGDownloadTask * obj in tasks) {
         if (![self.tasks containsObject:obj]) {
+            obj.download = self.download;
             [self.tasks addObject:obj];
         }
         switch (obj.state) {
@@ -233,6 +236,7 @@
         }
     }
     for (SGDownloadTask * task in temp) {
+        task.download = nil;
         [self.tasks removeObject:task];
     }
     [self.condition unlock];
