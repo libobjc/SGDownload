@@ -117,13 +117,23 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     self.downloadOperationQueue.maxConcurrentOperationCount = 1;
     self.downloadOperationQueue.qualityOfService = NSQualityOfServiceUserInteractive;
     
-    [self tryStartDownloadOperation];
+    if (self.lastSessionTaskCount > 0) {
+        if ([self.delegate respondsToSelector:@selector(downloadWillHandleLastTasks:)]) {
+            [self.delegate downloadWillHandleLastTasks:self];
+        }
+    } else {
+        NSLog(@"开始启动下载线程 1");
+        [self.downloadOperationQueue addOperation:self.downloadOperation];
+    }
 }
 
 - (void)tryStartDownloadOperation
 {
-    NSLog(@"开始启动下载线程");
+    NSLog(@"开始启动下载线程 2");
     if (self.lastSessionTaskCount <= 0 && ![self.downloadOperationQueue.operations containsObject:self.downloadOperation]) {
+        if ([self.delegate respondsToSelector:@selector(downloadDidHandleLastTasks:)]) {
+            [self.delegate downloadDidHandleLastTasks:self];
+        }
         [self.downloadOperationQueue addOperation:self.downloadOperation];
     }
 }

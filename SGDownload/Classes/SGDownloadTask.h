@@ -22,6 +22,7 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 
 @protocol SGDownloadTaskDelegate <NSObject>
 
+@optional
 - (void)taskStateDidChange:(SGDownloadTask *)task;
 - (void)taskProgressDidChange:(SGDownloadTask *)task;
 
