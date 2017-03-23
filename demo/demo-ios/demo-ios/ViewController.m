@@ -37,7 +37,7 @@
 {
     self.download = [SGDownload download];
     self.download.delegate = self;
-    self.download.maxConcurrentOperationCount = 5;
+    self.download.maxConcurrentOperationCount = 3;
     [self.download run];
 }
 

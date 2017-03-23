@@ -21,7 +21,7 @@
 		9C6C453F1E83CD0C00183A53 /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCell.h; sourceTree = "<group>"; };
 		9C6C45401E83CD0C00183A53 /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadCell.m; sourceTree = "<group>"; };
 		9C84EE411E83C98D00E79267 /* SGDownload.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SGDownload.framework; path = ../../build/Debug/SGDownload.framework; sourceTree = "<group>"; };
-		9CFA66811E83C8D3001A6D30 /* demo-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CFA66811E83C8D3001A6D30 /* SGDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SGDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CFA66851E83C8D3001A6D30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9CFA66871E83C8D3001A6D30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9CFA66881E83C8D3001A6D30 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -65,7 +65,7 @@
 		9CFA66821E83C8D3001A6D30 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9CFA66811E83C8D3001A6D30 /* demo-ios.app */,
+				9CFA66811E83C8D3001A6D30 /* SGDownload.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,7 +113,7 @@
 			);
 			name = "demo-ios";
 			productName = "demo-ios";
-			productReference = 9CFA66811E83C8D3001A6D30 /* demo-ios.app */;
+			productReference = 9CFA66811E83C8D3001A6D30 /* SGDownload.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -295,7 +295,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Debug;
 		};
@@ -309,7 +309,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Release;
 		};

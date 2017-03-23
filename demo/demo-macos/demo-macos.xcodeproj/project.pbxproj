@@ -18,7 +18,7 @@
 
 /* Begin PBXFileReference section */
 		9C84EE441E83CA3200E79267 /* SGDownload.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SGDownload.framework; path = ../../build/Debug/SGDownload.framework; sourceTree = "<group>"; };
-		9CFA66A41E83C8EB001A6D30 /* demo-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CFA66A41E83C8EB001A6D30 /* SGDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SGDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CFA66A81E83C8EB001A6D30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9CFA66AA1E83C8EB001A6D30 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9CFA66AB1E83C8EB001A6D30 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		9CFA66A51E83C8EB001A6D30 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9CFA66A41E83C8EB001A6D30 /* demo-macos.app */,
+				9CFA66A41E83C8EB001A6D30 /* SGDownload.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 			);
 			name = "demo-macos";
 			productName = "demo-macos";
-			productReference = 9CFA66A41E83C8EB001A6D30 /* demo-macos.app */;
+			productReference = 9CFA66A41E83C8EB001A6D30 /* SGDownload.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -288,7 +288,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Single.demo-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Debug;
 		};
@@ -301,7 +301,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Single.demo-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Release;
 		};
