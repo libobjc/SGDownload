@@ -80,7 +80,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return self;
 }
 
-- (void)startRunning
+- (void)run
 {
     [self setupOperation];
 }
@@ -159,7 +159,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
 }
 
-- (void)stopRunning
+- (void)invalidate
 {
     if (self.closed) return;
     
@@ -380,7 +380,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self stopRunning];
+    [self invalidate];
     NSLog(@"SGDownload release");
 }
 

@@ -56,8 +56,8 @@ extern NSString * const SGDownloadDefaultIdentifier;
 - (void)cancelTask:(SGDownloadTask *)task;
 - (void)cancelTasks:(NSArray <SGDownloadTask *> *)tasks;
 
-- (void)startRunning;
-- (void)stopRunning;
+- (void)run;
+- (void)invalidate;
 
 @end
 
