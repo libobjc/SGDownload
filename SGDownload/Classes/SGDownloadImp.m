@@ -14,6 +14,8 @@
 #import "SGDownloadTupleQueue.h"
 #import "SGDownloadTools.h"
 
+#import <objc/message.h>
+
 #import <TargetConditionals.h>
 #if TARGET_OS_OSX
 #import <AppKit/AppKit.h>
@@ -26,6 +28,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @interface SGDownload () <NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSURLSession * session;
+@property (nonatomic, assign) NSInteger lastSessionTaskCount;
 @property (nonatomic, copy) void(^backgroundCompletionHandler)();
 
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
@@ -101,14 +104,28 @@ static NSMutableArray <SGDownload *> * downloads = nil;
                                                  delegate:self
                                             delegateQueue:self.delegateQueue];
     
+    Ivar ivar = class_getInstanceVariable(NSClassFromString(@"__NSURLBackgroundSession"), "_tasks");
+    if (ivar) {
+        NSDictionary * tasks = object_getIvar(self.session, ivar);
+        if (tasks && tasks.count > 0) {
+            self.lastSessionTaskCount = tasks.count;
+        }
+    }
+    
     self.downloadOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(downloadOperationHandler) object:nil];
     self.downloadOperationQueue = [[NSOperationQueue alloc] init];
     self.downloadOperationQueue.maxConcurrentOperationCount = 1;
     self.downloadOperationQueue.qualityOfService = NSQualityOfServiceUserInteractive;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [self tryStartDownloadOperation];
+}
+
+- (void)tryStartDownloadOperation
+{
+    NSLog(@"开始启动下载线程");
+    if (self.lastSessionTaskCount <= 0 && ![self.downloadOperationQueue.operations containsObject:self.downloadOperation]) {
         [self.downloadOperationQueue addOperation:self.downloadOperation];
-    });
+    }
 }
 
 - (void)downloadOperationHandler
@@ -119,13 +136,11 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (self.closed) {
                 break;
             }
-            NSLog(@"调用 downloadTaskSync");
             SGDownloadTask * downloadTask = [self.taskQueue downloadTaskSync];
             if (!downloadTask) {
                 break;
             }
-            NSLog(@"调用 downloadTaskSync 完成");
-            downloadTask.state = SGDownloadTaskStateRunning;
+            [self.taskQueue setTaskState:downloadTask state:SGDownloadTaskStateRunning];
             
             NSURLSessionDownloadTask * sessionTask = nil;
             if (downloadTask.resumeInfoData.length > 0) {
@@ -137,9 +152,8 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             [self.taskTupleQueue addTuple:tuple];
             [sessionTask resume];
             [self.taskQueue archive];
-            NSLog(@"等待 dispatch_semaphore_wait");
+            NSLog(@"开始下载 : %@", downloadTask.title);
             dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
-            NSLog(@"等待 dispatch_semaphore_wait 完成");
         }
     }
 }
@@ -246,7 +260,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session
 {
-    NSLog(@"URLSessionDidFinishEventsForBackgroundURLSession");
+    NSLog(@"%s", __func__);
     if (self.backgroundCompletionHandler) {
         self.backgroundCompletionHandler();
     }
@@ -260,29 +274,29 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         [tuple.downloadTask setBytesWritten:0
                           totalBytesWritten:task.countOfBytesReceived
                   totalBytesExpectedToWrite:task.countOfBytesExpectedToReceive];
+        SGDownloadTaskState state;
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
                 tuple.downloadTask.resumeInfoData = resumeData;
             }
             if (error.code == NSURLErrorCancelled) {
-                tuple.downloadTask.state = SGDownloadTaskStateSuspend;
+                state = SGDownloadTaskStateSuspend;
             } else {
                 tuple.downloadTask.error = error;
-                tuple.downloadTask.state = SGDownloadTaskStateFailured;
+                state = SGDownloadTaskStateFailured;
             }
         } else {
             if (![[NSFileManager defaultManager] fileExistsAtPath:tuple.downloadTask.fileURL.path]) {
                 tuple.downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
-                tuple.downloadTask.state = SGDownloadTaskStateFailured;
+                state = SGDownloadTaskStateFailured;
             } else {
-                tuple.downloadTask.state = SGDownloadTaskStateFinished;
+                state = SGDownloadTaskStateFinished;
             }
         }
+        [self.taskQueue setTaskState:tuple.downloadTask state:state];
         [self.taskTupleQueue removeTuple:tuple];
-        NSLog(@"唤醒 dispatch_semaphore_signal");
         dispatch_semaphore_signal(self.concurrentSemaphore);
-        NSLog(@"唤醒 dispatch_semaphore_signal 完成");
     }
     else
     {
@@ -292,25 +306,35 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         [downloadTask setBytesWritten:0
                     totalBytesWritten:task.countOfBytesReceived
             totalBytesExpectedToWrite:task.countOfBytesExpectedToReceive];
+        SGDownloadTaskState state;
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
                 downloadTask.resumeInfoData = resumeData;
             }
             if (error.code == NSURLErrorCancelled) {
-                downloadTask.state = SGDownloadTaskStateWaiting;
+                NSLog(@"%@ 恢复 等待", downloadTask.title);
+                state = SGDownloadTaskStateWaiting;
             } else {
                 downloadTask.error = error;
-                downloadTask.state = SGDownloadTaskStateFailured;
+                NSLog(@"%@ 恢复 失败", downloadTask.title);
+                state = SGDownloadTaskStateFailured;
             }
         } else {
             if (![[NSFileManager defaultManager] fileExistsAtPath:downloadTask.fileURL.path]) {
                 downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
-                downloadTask.state = SGDownloadTaskStateFailured;
+                NSLog(@"%@ 恢复 失败", downloadTask.title);
+                state = SGDownloadTaskStateFailured;
             } else {
-                downloadTask.state = SGDownloadTaskStateFinished;
+                NSLog(@"%@ 恢复 完成", downloadTask.title);
+                state = SGDownloadTaskStateFinished;
             }
         }
+        [self.taskQueue setTaskState:downloadTask state:state];
+        self.lastSessionTaskCount--;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self tryStartDownloadOperation];
+        });
     }
     [self.taskQueue archive];
 }

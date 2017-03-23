@@ -72,6 +72,13 @@
     return task;
 }
 
+- (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state
+{
+    [self.condition lock];
+    task.state = state;
+    [self.condition unlock];
+}
+
 - (SGDownloadTask *)downloadTaskSync
 {
     [self.condition lock];

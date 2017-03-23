@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SGDownloadTask.h"
 @class SGDownload;
-@class SGDownloadTask;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSMutableArray <SGDownloadTask *> * tasks;
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;
+- (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state;
 
 - (nullable SGDownloadTask *)downloadTaskSync;
 - (void)downloadTask:(SGDownloadTask *)task;
