@@ -7,6 +7,7 @@
 //
 
 #import "SGDownloadTask.h"
+#import "SGDownloadTaskPrivate.h"
 #import "SGDownloadImp.h"
 #import "SGDownloadTools.h"
 
@@ -98,32 +99,24 @@
     self.resumeExpectedTotalBytes = 0;
 }
 
-- (void)setTotalBytesWritten:(int64_t)totalBytesWritten
+- (void)setBytesWritten:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    if (_totalBytesWritten != totalBytesWritten) {
-        _totalBytesWritten = totalBytesWritten;
-        if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
-            [self.delegate taskProgressDidChange:self];
-        }
-        if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
-            [self.download.delegate download:self.download taskProgressDidChange:self];
-        }
+    self.bytesWritten = bytesWritten;
+    self.totalBytesWritten = totalBytesWritten;
+    self.totalBytesExpectedToWrite = totalBytesExpectedToWrite;
+    
+    if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
+        [self.delegate taskProgressDidChange:self];
+    }
+    if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
+        [self.download.delegate download:self.download taskProgressDidChange:self];
     }
 }
 
-- (void)setResumeFileOffset:(int64_t)resumeFileOffset
+- (void)setResumeFileOffset:(int64_t)resumeFileOffset resumeExpectedTotalBytes:(int64_t)resumeExpectedTotalBytes
 {
-    if (_resumeFileOffset != resumeFileOffset) {
-        _resumeFileOffset = resumeFileOffset;
-        if (_resumeFileOffset > 0) {
-            if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
-                [self.delegate taskProgressDidChange:self];
-            }
-            if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
-                [self.download.delegate download:self.download taskProgressDidChange:self];
-            }
-        }
-    }
+    self.resumeFileOffset = resumeFileOffset;
+    self.resumeExpectedTotalBytes = resumeExpectedTotalBytes;
 }
 
 - (NSURL *)fileURL

@@ -8,6 +8,7 @@
 
 #import "SGDownloadImp.h"
 #import "SGDownloadTask.h"
+#import "SGDownloadTaskPrivate.h"
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
 #import "SGDownloadTupleQueue.h"
@@ -256,6 +257,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:(NSURLSessionDownloadTask *)task];
     if (tuple)
     {
+        [tuple.downloadTask setBytesWritten:0
+                          totalBytesWritten:task.countOfBytesExpectedToReceive
+                  totalBytesExpectedToWrite:task.countOfBytesReceived];
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
@@ -285,6 +289,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:task.currentRequest.URL];
         if (!downloadTask) return;
         
+        [downloadTask setBytesWritten:0
+                    totalBytesWritten:task.countOfBytesExpectedToReceive
+            totalBytesExpectedToWrite:task.countOfBytesReceived];
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
@@ -350,9 +357,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
     if (!tuple) return;
     
-    tuple.downloadTask.bytesWritten = bytesWritten;
-    tuple.downloadTask.totalBytesWritten = totalBytesWritten;
-    tuple.downloadTask.totalBytesExpectedToWrite = totalBytesExpectedToWrite;
+    [tuple.downloadTask setBytesWritten:bytesWritten totalBytesWritten:totalBytesExpectedToWrite totalBytesExpectedToWrite:totalBytesWritten];
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes

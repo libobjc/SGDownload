@@ -8,6 +8,7 @@
 
 #import "SGDownloadTupleQueue.h"
 #import "SGDownloadTask.h"
+#import "SGDownloadTaskPrivate.h"
 #import "SGDownloadTuple.h"
 
 @interface SGDownloadTupleQueue ()

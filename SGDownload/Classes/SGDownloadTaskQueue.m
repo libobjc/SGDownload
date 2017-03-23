@@ -9,6 +9,7 @@
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadImp.h"
 #import "SGDownloadTask.h"
+#import "SGDownloadTaskPrivate.h"
 
 @interface SGDownloadTaskQueue ()
 

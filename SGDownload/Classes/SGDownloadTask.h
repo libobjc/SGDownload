@@ -34,23 +34,23 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 @property (nonatomic, weak) SGDownload * download;
 @property (nonatomic, weak) id <SGDownloadTaskDelegate> delegate;
 
-@property (nonatomic, assign) SGDownloadTaskState state;
+@property (nonatomic, assign, readonly) SGDownloadTaskState state;
 
-@property (nonatomic, copy) NSString * title;
-@property (nonatomic, copy) NSURL * contentURL;
-@property (nonatomic, copy) NSURL * fileURL;
+@property (nonatomic, copy, readonly) NSString * title;
+@property (nonatomic, copy, readonly) NSURL * contentURL;
+@property (nonatomic, copy, readonly) NSURL * fileURL;
 @property (nonatomic, assign) BOOL replaceHomeDirectoryIfNeed;      // default is YES;
 
 @property (nonatomic, assign, readonly) float progress;
-@property (nonatomic, assign) int64_t bytesWritten;
-@property (nonatomic, assign) int64_t totalBytesWritten;
-@property (nonatomic, assign) int64_t totalBytesExpectedToWrite;
+@property (nonatomic, assign, readonly) int64_t bytesWritten;
+@property (nonatomic, assign, readonly) int64_t totalBytesWritten;
+@property (nonatomic, assign, readonly) int64_t totalBytesExpectedToWrite;
 
 // about resume
-@property (nonatomic, strong) NSData * resumeInfoData;
-@property (nonatomic, assign) int64_t resumeFileOffset;
-@property (nonatomic, assign) int64_t resumeExpectedTotalBytes;
+@property (nonatomic, strong, readonly) NSData * resumeInfoData;
+@property (nonatomic, assign, readonly) int64_t resumeFileOffset;
+@property (nonatomic, assign, readonly) int64_t resumeExpectedTotalBytes;
 
-@property (nonatomic, strong) NSError * error;
+@property (nonatomic, strong, readonly) NSError * error;
 
 @end
