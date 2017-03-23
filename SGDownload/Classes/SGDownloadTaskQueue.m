@@ -22,7 +22,7 @@
 
 + (instancetype)queueWithDownload:(SGDownload *)download
 {
-    return [[self alloc] queueWithDownload:download];
+    return [[self alloc] initWithDownload:download];
 }
 
 + (NSString *)archiverPathWithIdentifier:(NSString *)identifier

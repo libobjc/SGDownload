@@ -14,9 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol SGDownloadDelegate <NSObject>
 
-- (void)download:(SGDownload *)download taskDidFinished:(SGDownloadTask *)task;
-- (void)download:(SGDownload *)download task:(SGDownloadTask *)task didFailuredWithError:(NSError *)error;
-- (void)download:(SGDownload *)download task:(SGDownloadTask *)task didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
+- (void)download:(SGDownload *)download taskStateDidChange:(SGDownloadTask *)task;
+- (void)download:(SGDownload *)download taskProgressDidChange:(SGDownloadTask *)task;
 
 @end
 

@@ -266,22 +266,13 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             } else {
                 tuple.downloadTask.error = error;
                 tuple.downloadTask.state = SGDownloadTaskStateFailured;
-                if ([self.delegate respondsToSelector:@selector(download:task:didFailuredWithError:)]) {
-                    [self.delegate download:self task:tuple.downloadTask didFailuredWithError:error];
-                }
             }
         } else {
             if (![[NSFileManager defaultManager] fileExistsAtPath:tuple.downloadTask.fileURL.path]) {
                 tuple.downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
                 tuple.downloadTask.state = SGDownloadTaskStateFailured;
-                if ([self.delegate respondsToSelector:@selector(download:task:didFailuredWithError:)]) {
-                    [self.delegate download:self task:tuple.downloadTask didFailuredWithError:error];
-                }
             } else {
                 tuple.downloadTask.state = SGDownloadTaskStateFinished;
-                if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
-                    [self.delegate download:self taskDidFinished:tuple.downloadTask];
-                }
             }
         }
         [self.taskTupleQueue removeTuple:tuple];
@@ -362,13 +353,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     tuple.downloadTask.bytesWritten = bytesWritten;
     tuple.downloadTask.totalBytesWritten = totalBytesWritten;
     tuple.downloadTask.totalBytesExpectedToWrite = totalBytesExpectedToWrite;
-    if ([self.delegate respondsToSelector:@selector(download:task:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)]) {
-        [self.delegate download:self
-                           task:tuple.downloadTask
-                   didWriteData:tuple.downloadTask.bytesWritten
-              totalBytesWritten:tuple.downloadTask.totalBytesWritten
-      totalBytesExpectedToWrite:tuple.downloadTask.totalBytesExpectedToWrite];
-    }
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes

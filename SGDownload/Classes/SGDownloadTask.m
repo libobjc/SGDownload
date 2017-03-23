@@ -7,6 +7,7 @@
 //
 
 #import "SGDownloadTask.h"
+#import "SGDownloadImp.h"
 #import "SGDownloadTools.h"
 
 @interface SGDownloadTask ()
@@ -79,10 +80,12 @@
 - (void)setState:(SGDownloadTaskState)state
 {
     if (_state != state) {
-        SGDownloadTaskState temp = _state;
         _state = state;
-        if ([self.delegate respondsToSelector:@selector(taskStateDidChange:current:previous:)]) {
-            [self.delegate taskStateDidChange:self current:_state previous:temp];
+        if ([self.delegate respondsToSelector:@selector(taskStateDidChange:)]) {
+            [self.delegate taskStateDidChange:self];
+        }
+        if ([self.download.delegate respondsToSelector:@selector(download:taskStateDidChange:)]) {
+            [self.download.delegate download:self.download taskStateDidChange:self];
         }
     }
     if (_state != SGDownloadTaskStateFailured) {
@@ -93,6 +96,34 @@
     }
     self.resumeFileOffset = 0;
     self.resumeExpectedTotalBytes = 0;
+}
+
+- (void)setTotalBytesWritten:(int64_t)totalBytesWritten
+{
+    if (_totalBytesWritten != totalBytesWritten) {
+        _totalBytesWritten = totalBytesWritten;
+        if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
+            [self.delegate taskProgressDidChange:self];
+        }
+        if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
+            [self.download.delegate download:self.download taskProgressDidChange:self];
+        }
+    }
+}
+
+- (void)setResumeFileOffset:(int64_t)resumeFileOffset
+{
+    if (_resumeFileOffset != resumeFileOffset) {
+        _resumeFileOffset = resumeFileOffset;
+        if (_resumeFileOffset > 0) {
+            if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
+                [self.delegate taskProgressDidChange:self];
+            }
+            if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
+                [self.download.delegate download:self.download taskProgressDidChange:self];
+            }
+        }
+    }
 }
 
 - (NSURL *)fileURL
