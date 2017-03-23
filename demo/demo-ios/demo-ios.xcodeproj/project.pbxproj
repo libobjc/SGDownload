@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C6C45411E83CD0C00183A53 /* DownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6C45401E83CD0C00183A53 /* DownloadCell.m */; };
 		9C84EE421E83C98D00E79267 /* SGDownload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C84EE411E83C98D00E79267 /* SGDownload.framework */; };
 		9CFA66861E83C8D3001A6D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA66851E83C8D3001A6D30 /* main.m */; };
 		9CFA66891E83C8D3001A6D30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA66881E83C8D3001A6D30 /* AppDelegate.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C6C453F1E83CD0C00183A53 /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCell.h; sourceTree = "<group>"; };
+		9C6C45401E83CD0C00183A53 /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadCell.m; sourceTree = "<group>"; };
 		9C84EE411E83C98D00E79267 /* SGDownload.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SGDownload.framework; path = ../../build/Debug/SGDownload.framework; sourceTree = "<group>"; };
 		9CFA66811E83C8D3001A6D30 /* demo-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CFA66851E83C8D3001A6D30 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				9CFA66881E83C8D3001A6D30 /* AppDelegate.m */,
 				9CFA668A1E83C8D3001A6D30 /* ViewController.h */,
 				9CFA668B1E83C8D3001A6D30 /* ViewController.m */,
+				9C6C453F1E83CD0C00183A53 /* DownloadCell.h */,
+				9C6C45401E83CD0C00183A53 /* DownloadCell.m */,
 				9CFA668D1E83C8D3001A6D30 /* Main.storyboard */,
 				9CFA66901E83C8D3001A6D30 /* Assets.xcassets */,
 				9CFA66921E83C8D3001A6D30 /* LaunchScreen.storyboard */,
@@ -164,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CFA668C1E83C8D3001A6D30 /* ViewController.m in Sources */,
+				9C6C45411E83CD0C00183A53 /* DownloadCell.m in Sources */,
 				9CFA66891E83C8D3001A6D30 /* AppDelegate.m in Sources */,
 				9CFA66861E83C8D3001A6D30 /* main.m in Sources */,
 			);
