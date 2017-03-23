@@ -28,7 +28,6 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @interface SGDownload () <NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSURLSession * session;
-@property (nonatomic, assign) NSInteger lastSessionTaskCount;
 @property (nonatomic, copy) void(^backgroundCompletionHandler)();
 
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
@@ -88,13 +87,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)setupOperation
 {
-    long count;
     if (self.maxConcurrentOperationCount <= 0) {
-        count = 0;
-    } else {
-        count = self.maxConcurrentOperationCount - 1;
+        self.maxConcurrentOperationCount = 1;
     }
-    self.concurrentSemaphore = dispatch_semaphore_create(count);
+    self.concurrentSemaphore = dispatch_semaphore_create(self.maxConcurrentOperationCount);
     
     self.delegateQueue = [[NSOperationQueue alloc] init];
     self.delegateQueue.maxConcurrentOperationCount = 1;
@@ -108,7 +104,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (ivar) {
         NSDictionary <NSNumber *, NSURLSessionDownloadTask *> * lastTasks = object_getIvar(self.session, ivar);
         if (lastTasks && lastTasks.count > 0) {
-            self.lastSessionTaskCount = lastTasks.count;
+            if (self.maxConcurrentOperationCount < lastTasks.count) {
+                self.maxConcurrentOperationCount = lastTasks.count;
+                self.concurrentSemaphore = dispatch_semaphore_create(self.maxConcurrentOperationCount);
+            }
             [lastTasks enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSURLSessionDownloadTask * _Nonnull obj, BOOL * _Nonnull stop) {
                 SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:obj.currentRequest.URL];
                 if (obj.state == NSURLSessionTaskStateRunning) {
@@ -117,6 +116,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
                 SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:obj];
                 [self.taskTupleQueue addTuple:tuple];
                 [self.taskQueue archive];
+                dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
             }];
         }
     }
@@ -136,9 +136,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (self.closed) {
                 break;
             }
-            while (self.lastSessionTaskCount > 0) {
-                dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
-            }
+            dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
             NSLog(@"开始下载新任务");
             SGDownloadTask * downloadTask = [self.taskQueue downloadTaskSync];
             if (!downloadTask) {
@@ -157,7 +155,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             [sessionTask resume];
             [self.taskQueue archive];
             NSLog(@"开始下载 : %@", downloadTask.title);
-            dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
         }
     }
 }
@@ -302,7 +299,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     [self.taskQueue setTaskState:tuple.downloadTask state:state];
     [self.taskTupleQueue removeTuple:tuple];
-    self.lastSessionTaskCount--;
     dispatch_semaphore_signal(self.concurrentSemaphore);
     [self.taskQueue archive];
 }
