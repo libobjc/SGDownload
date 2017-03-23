@@ -138,6 +138,15 @@
     }
 }
 
+- (float)progress
+{
+    if (self.totalBytesExpectedToWrite <= 0 || self.totalBytesWritten <= 0) {
+        return 0;
+    } else {
+        return self.totalBytesWritten / (self.totalBytesExpectedToWrite * 1.0f);
+    }
+}
+
 - (void)dealloc
 {
     NSLog(@"SGDownloadTask release");

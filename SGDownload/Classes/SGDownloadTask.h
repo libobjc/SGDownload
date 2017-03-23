@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 @property (nonatomic, copy) NSURL * fileURL;
 @property (nonatomic, assign) BOOL replaceHomeDirectoryIfNeed;      // default is YES;
 
+@property (nonatomic, assign, readonly) float progress;
 @property (nonatomic, assign) int64_t bytesWritten;
 @property (nonatomic, assign) int64_t totalBytesWritten;
 @property (nonatomic, assign) int64_t totalBytesExpectedToWrite;
