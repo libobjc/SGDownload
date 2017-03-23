@@ -258,8 +258,8 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (tuple)
     {
         [tuple.downloadTask setBytesWritten:0
-                          totalBytesWritten:task.countOfBytesExpectedToReceive
-                  totalBytesExpectedToWrite:task.countOfBytesReceived];
+                          totalBytesWritten:task.countOfBytesReceived
+                  totalBytesExpectedToWrite:task.countOfBytesExpectedToReceive];
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
@@ -290,8 +290,8 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         if (!downloadTask) return;
         
         [downloadTask setBytesWritten:0
-                    totalBytesWritten:task.countOfBytesExpectedToReceive
-            totalBytesExpectedToWrite:task.countOfBytesReceived];
+                    totalBytesWritten:task.countOfBytesReceived
+            totalBytesExpectedToWrite:task.countOfBytesExpectedToReceive];
         if (error) {
             NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
             if (resumeData) {
@@ -357,7 +357,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
     if (!tuple) return;
     
-    [tuple.downloadTask setBytesWritten:bytesWritten totalBytesWritten:totalBytesExpectedToWrite totalBytesExpectedToWrite:totalBytesWritten];
+    [tuple.downloadTask setBytesWritten:bytesWritten
+                      totalBytesWritten:totalBytesWritten
+              totalBytesExpectedToWrite:totalBytesExpectedToWrite];
+    [self.taskQueue archive];
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
@@ -367,6 +370,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     tuple.downloadTask.resumeFileOffset = fileOffset;
     tuple.downloadTask.resumeExpectedTotalBytes = expectedTotalBytes;
+    [self.taskQueue archive];
 }
 
 
