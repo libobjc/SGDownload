@@ -264,16 +264,24 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (error.code == NSURLErrorCancelled) {
                 tuple.downloadTask.state = SGDownloadTaskStateSuspend;
             } else {
-                tuple.downloadTask.state = SGDownloadTaskStateFaiulred;
                 tuple.downloadTask.error = error;
+                tuple.downloadTask.state = SGDownloadTaskStateFailured;
                 if ([self.delegate respondsToSelector:@selector(download:task:didFailuredWithError:)]) {
                     [self.delegate download:self task:tuple.downloadTask didFailuredWithError:error];
                 }
             }
         } else {
-            tuple.downloadTask.state = SGDownloadTaskStateFinished;
-            if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
-                [self.delegate download:self taskDidFinished:tuple.downloadTask];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:tuple.downloadTask.fileURL.path]) {
+                tuple.downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
+                tuple.downloadTask.state = SGDownloadTaskStateFailured;
+                if ([self.delegate respondsToSelector:@selector(download:task:didFailuredWithError:)]) {
+                    [self.delegate download:self task:tuple.downloadTask didFailuredWithError:error];
+                }
+            } else {
+                tuple.downloadTask.state = SGDownloadTaskStateFinished;
+                if ([self.delegate respondsToSelector:@selector(download:taskDidFinished:)]) {
+                    [self.delegate download:self taskDidFinished:tuple.downloadTask];
+                }
             }
         }
         [self.taskTupleQueue removeTuple:tuple];
@@ -294,11 +302,16 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (error.code == NSURLErrorCancelled) {
                 downloadTask.state = SGDownloadTaskStateWaiting;
             } else {
-                downloadTask.state = SGDownloadTaskStateFaiulred;
                 downloadTask.error = error;
+                downloadTask.state = SGDownloadTaskStateFailured;
             }
         } else {
-            downloadTask.state = SGDownloadTaskStateFinished;
+            if (![[NSFileManager defaultManager] fileExistsAtPath:downloadTask.fileURL.path]) {
+                downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
+                downloadTask.state = SGDownloadTaskStateFailured;
+            } else {
+                downloadTask.state = SGDownloadTaskStateFinished;
+            }
         }
     }
     [self.taskQueue archive];

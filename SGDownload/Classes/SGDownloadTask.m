@@ -78,7 +78,15 @@
 
 - (void)setState:(SGDownloadTaskState)state
 {
-    _state = state;
+    if (_state != state) {
+        _state = state;
+    }
+    if (_state != SGDownloadTaskStateFailured) {
+        self.error = nil;
+    }
+    if (_state == SGDownloadTaskStateFinished) {
+        self.resumeInfoData = nil;
+    }
     self.resumeFileOffset = 0;
     self.resumeExpectedTotalBytes = 0;
 }

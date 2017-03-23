@@ -120,7 +120,7 @@
             case SGDownloadTaskStateNone:
             case SGDownloadTaskStateSuspend:
             case SGDownloadTaskStateCanceled:
-            case SGDownloadTaskStateFaiulred:
+            case SGDownloadTaskStateFailured:
                 obj.state = SGDownloadTaskStateWaiting;
                 needSignal = YES;
                 break;
@@ -159,7 +159,7 @@
             case SGDownloadTaskStateNone:
             case SGDownloadTaskStateSuspend:
             case SGDownloadTaskStateCanceled:
-            case SGDownloadTaskStateFaiulred:
+            case SGDownloadTaskStateFailured:
                 task.state = SGDownloadTaskStateWaiting;
                 needSignal = YES;
                 break;

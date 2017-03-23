@@ -15,7 +15,7 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
     SGDownloadTaskStateSuspend,
     SGDownloadTaskStateFinished,
     SGDownloadTaskStateCanceled,
-    SGDownloadTaskStateFaiulred,
+    SGDownloadTaskStateFailured,
 };
 
 @interface SGDownloadTask : NSObject
