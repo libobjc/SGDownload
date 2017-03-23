@@ -79,7 +79,11 @@
 - (void)setState:(SGDownloadTaskState)state
 {
     if (_state != state) {
+        SGDownloadTaskState temp = _state;
         _state = state;
+        if ([self.delegate respondsToSelector:@selector(taskStateDidChange:current:previous:)]) {
+            [self.delegate taskStateDidChange:self current:_state previous:temp];
+        }
     }
     if (_state != SGDownloadTaskStateFailured) {
         self.error = nil;
