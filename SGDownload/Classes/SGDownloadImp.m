@@ -11,6 +11,7 @@
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
 #import "SGDownloadTupleQueue.h"
+#import "SGDownloadTools.h"
 
 #import <TargetConditionals.h>
 #if TARGET_OS_OSX
@@ -314,8 +315,24 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
     if (!obj) return;
     
+    NSString * path = location.path;
+    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+    if (!exists) {
+        path = [SGDownloadTools replacehHomeDirectoryForFilePath:path];
+        exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
+        if (!exists) {
+            obj.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
+            NSLog(@"完成 移动失败 3");
+            return;
+        }
+    }
+    
+    NSString * filePath = obj.fileURL.path;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    }
     NSError * error;
-    [[NSFileManager defaultManager] moveItemAtURL:location toURL:obj.fileURL error:&error];
+    [[NSFileManager defaultManager] moveItemAtPath:path toPath:filePath error:&error];
     obj.error = error;
     if (error) {
         NSLog(@"完成 移动失败 : %@", error);

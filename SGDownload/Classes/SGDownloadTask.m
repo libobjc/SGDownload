@@ -7,10 +7,11 @@
 //
 
 #import "SGDownloadTask.h"
+#import "SGDownloadTools.h"
 
 @interface SGDownloadTask ()
 
-@property (nonatomic, copy) NSURL * prependHomeDirectoryFileURL;
+@property (nonatomic, copy) NSURL * realFileURL;
 
 @end
 
@@ -27,7 +28,7 @@
         self.title = title;
         self.contentURL = contentURL;
         self.fileURL = fileURL;
-        self.prependHomeDirectoryForFileURL = YES;
+        self.replaceHomeDirectoryIfNeed = YES;
     }
     return self;
 }
@@ -40,7 +41,7 @@
         self.title = [aDecoder decodeObjectForKey:@"title"];
         self.contentURL = [aDecoder decodeObjectForKey:@"contentURL"];
         self.fileURL = [aDecoder decodeObjectForKey:@"fileURL"];
-        self.prependHomeDirectoryForFileURL = [[aDecoder decodeObjectForKey:@"prependHomeDirectoryForFileURL"] boolValue];
+        self.replaceHomeDirectoryIfNeed = [[aDecoder decodeObjectForKey:@"replaceHomeDirectoryIfNeed"] boolValue];
         
         self.bytesWritten = [[aDecoder decodeObjectForKey:@"bytesWritten"] longLongValue];
         self.totalBytesWritten = [[aDecoder decodeObjectForKey:@"totalBytesWritten"] longLongValue];
@@ -62,7 +63,7 @@
     [aCoder encodeObject:self.title forKey:@"title"];
     [aCoder encodeObject:self.contentURL forKey:@"contentURL"];
     [aCoder encodeObject:self.fileURL forKey:@"fileURL"];
-    [aCoder encodeObject:@(self.prependHomeDirectoryForFileURL) forKey:@"prependHomeDirectoryForFileURL"];
+    [aCoder encodeObject:@(self.replaceHomeDirectoryIfNeed) forKey:@"replaceHomeDirectoryIfNeed"];
     
     [aCoder encodeObject:@(self.bytesWritten) forKey:@"bytesWritten"];
     [aCoder encodeObject:@(self.totalBytesWritten) forKey:@"totalBytesWritten"];
@@ -84,24 +85,11 @@
 
 - (NSURL *)fileURL
 {
-    if (self.prependHomeDirectoryForFileURL) {
-        if (!self.prependHomeDirectoryFileURL) {
-            NSRange range = [_fileURL.path rangeOfString:@"/var/mobile/Containers/Data/Application/"];
-            if (range.location != NSNotFound) {
-                NSString * path = [_fileURL.path substringFromIndex:range.location + range.length];
-                NSRange range2 = [path rangeOfString:@"/"];
-                if (range.location != NSNotFound) {
-                    path = [path substringFromIndex:range2.location];
-                    path = [NSString stringWithFormat:@"%@%@", NSHomeDirectory(), path];
-                    self.prependHomeDirectoryFileURL = [NSURL fileURLWithPath:path];
-                } else {
-                    self.prependHomeDirectoryFileURL = _fileURL;
-                }
-            } else {
-                self.prependHomeDirectoryFileURL = _fileURL;
-            }
+    if (self.replaceHomeDirectoryIfNeed) {
+        if (!self.realFileURL) {
+            self.realFileURL = [SGDownloadTools replacehHomeDirectoryForFileURL:_fileURL];
         }
-        return self.prependHomeDirectoryFileURL;
+        return self.realFileURL;
     } else {
         return _fileURL;
     }
