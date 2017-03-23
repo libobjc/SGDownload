@@ -29,6 +29,7 @@ extern NSString * const SGDownloadDefaultIdentifier;
 
 + (instancetype)download;    // default download manager.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
++ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
 
 @property (nonatomic, copy, readonly) NSString * identifier;
 @property (nonatomic, strong, readonly) NSURLSessionConfiguration * sessionConfiguration;
@@ -57,7 +58,6 @@ extern NSString * const SGDownloadDefaultIdentifier;
 
 - (void)startRunning;
 - (void)stopRunning;
-- (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
 
 @end
 
