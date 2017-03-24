@@ -28,7 +28,14 @@
 
 + (NSString *)archiverPathWithIdentifier:(NSString *)identifier
 {
-    return [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%@.SGDownloadArchiver", identifier]];
+    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString * tempPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadTemp"];
+    BOOL isDirectory;
+    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:tempPath isDirectory:&isDirectory];
+    if (!result || !isDirectory) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.SGDownloadArchiver", identifier]];
 }
 
 - (instancetype)initWithDownload:(SGDownload *)download
