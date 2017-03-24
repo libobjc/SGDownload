@@ -70,13 +70,11 @@
 - (IBAction)resumeAction:(id)sender
 {
     [self.download resumeAllTasks];
-    [self.tableView reloadData];
 }
 
 - (IBAction)suspendAction:(id)sender
 {
     [self.download suspendAllTasks];
-    [self.tableView reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -115,7 +113,22 @@
         default:
             break;
     }
-    [self.tableView reloadData];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.download cancelTask:[self.download.tasks objectAtIndex:indexPath.row]];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 - (void)dealloc

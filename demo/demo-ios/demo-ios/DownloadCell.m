@@ -67,9 +67,7 @@
             text = @"Failured";
             break;
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.stateLabel.text = text;
-    });
+    self.stateLabel.text = text;
 }
 
 - (void)refreshProgress
@@ -78,10 +76,8 @@
     int64_t current = self.downloadTask.totalBytesWritten;
     int64_t total = self.downloadTask.totalBytesExpectedToWrite;
     NSString * text = [NSString stringWithFormat:@"%lld / %lld", current, total];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.progressView.progress = progress;
-        self.progressLabel.text = text;
-    });
+    self.progressView.progress = progress;
+    self.progressLabel.text = text;
 }
 
 @end
