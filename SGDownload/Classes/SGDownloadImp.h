@@ -31,6 +31,9 @@ extern NSString * const SGDownloadDefaultIdentifier;
 + (instancetype)download;    // default download manager.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
 
++ (NSString *)archiverDirectoryPath;
++ (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier;
+
 #if TARGET_OS_IOS || TARGET_OS_TV
 + (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
 #endif

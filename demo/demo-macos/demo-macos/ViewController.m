@@ -35,6 +35,9 @@
 
 - (IBAction)addAction:(NSButton *)sender
 {
+    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString * desPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadData"];
+    
     NSMutableArray <SGDownloadTask *> * tasks = [NSMutableArray array];
     for (int i = 1; i<=10; i++)
     {
@@ -45,7 +48,7 @@
         {
             task = [SGDownloadTask taskWithTitle:[NSString stringWithFormat:@"%d", i]
                                       contentURL:contentURL
-                                         fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
+                                         fileURL:[NSURL fileURLWithPath:[desPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.mp4", i]]]];
         }
         [tasks addObject:task];
     }

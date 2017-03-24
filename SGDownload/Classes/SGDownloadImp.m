@@ -66,6 +66,23 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return obj;
 }
 
++ (NSString *)archiverDirectoryPath
+{
+    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString * archiverDirectoryPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadArchiver"];
+    BOOL isDirectory;
+    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:archiverDirectoryPath isDirectory:&isDirectory];
+    if (!result || !isDirectory) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:archiverDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return archiverDirectoryPath;
+}
+
++ (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier
+{
+    return [[self archiverDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.SGDownloadArchiver", identifier]];
+}
+
 - (instancetype)initWithIdentifier:(NSString *)identifier
 {
     if (self = [super init]) {
@@ -316,9 +333,18 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
     
     NSString * filePath = tuple.downloadTask.fileURL.path;
+    NSString * directoryPath = filePath.stringByDeletingLastPathComponent;
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     }
+    
+    BOOL isDirectory;
+    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:directoryPath isDirectory:&isDirectory];
+    if (!result || !isDirectory) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
     NSError * error;
     [[NSFileManager defaultManager] moveItemAtPath:path toPath:filePath error:&error];
     tuple.downloadTask.error = error;

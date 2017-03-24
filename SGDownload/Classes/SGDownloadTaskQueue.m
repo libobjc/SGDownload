@@ -26,23 +26,11 @@
     return [[self alloc] initWithDownload:download];
 }
 
-+ (NSString *)archiverPathWithIdentifier:(NSString *)identifier
-{
-    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString * tempPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadTemp"];
-    BOOL isDirectory;
-    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:tempPath isDirectory:&isDirectory];
-    if (!result || !isDirectory) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:tempPath withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    return [tempPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.SGDownloadArchiver", identifier]];
-}
-
 - (instancetype)initWithDownload:(SGDownload *)download
 {
     if (self = [super init]) {
         self->_download = download;
-        self->_archiverPath = [self.class archiverPathWithIdentifier:download.identifier];
+        self->_archiverPath = [SGDownload archiverFilePathWithIdentifier:download.identifier];
         self->_tasks = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archiverPath];
         if (!self->_tasks) {
             self->_tasks = [NSMutableArray array];
