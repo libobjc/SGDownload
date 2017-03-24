@@ -96,6 +96,8 @@
     NSTextField * view = [tableView makeViewWithIdentifier:tableColumn.title owner:self];
     if (!view) {
         view = [[NSTextField alloc] init];
+        view.bezeled = NO;
+        view.drawsBackground = NO;
         view.lineBreakMode = NSLineBreakByTruncatingTail;
         view.maximumNumberOfLines = 1;
         view.editable = NO;
