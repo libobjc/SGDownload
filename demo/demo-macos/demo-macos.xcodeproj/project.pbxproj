@@ -12,10 +12,12 @@
 		9CB3E3851E84EE6800DF934C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB3E3841E84EE6800DF934C /* ViewController.m */; };
 		9CB3E3871E84EE6800DF934C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9CB3E3861E84EE6800DF934C /* Assets.xcassets */; };
 		9CB3E38A1E84EE6800DF934C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CB3E3881E84EE6800DF934C /* Main.storyboard */; };
+		9CB3E3931E84F32600DF934C /* SGDownload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB3E3921E84F32600DF934C /* SGDownload.framework */; };
+		9CB3E3961E84F80900DF934C /* DownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CB3E3951E84F80900DF934C /* DownloadCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9CB3E37A1E84EE6800DF934C /* demo-macos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-macos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CB3E37A1E84EE6800DF934C /* SGDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SGDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB3E37D1E84EE6800DF934C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9CB3E37E1E84EE6800DF934C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		9CB3E3811E84EE6800DF934C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -24,6 +26,9 @@
 		9CB3E3861E84EE6800DF934C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9CB3E3891E84EE6800DF934C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9CB3E38B1E84EE6800DF934C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9CB3E3921E84F32600DF934C /* SGDownload.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SGDownload.framework; path = ../../build/Debug/SGDownload.framework; sourceTree = "<group>"; };
+		9CB3E3941E84F80900DF934C /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCell.h; sourceTree = "<group>"; };
+		9CB3E3951E84F80900DF934C /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CB3E3931E84F32600DF934C /* SGDownload.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,13 +48,14 @@
 			children = (
 				9CB3E37C1E84EE6800DF934C /* demo-macos */,
 				9CB3E37B1E84EE6800DF934C /* Products */,
+				9CB3E3911E84F32500DF934C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		9CB3E37B1E84EE6800DF934C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9CB3E37A1E84EE6800DF934C /* demo-macos.app */,
+				9CB3E37A1E84EE6800DF934C /* SGDownload.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -60,6 +67,8 @@
 				9CB3E37E1E84EE6800DF934C /* AppDelegate.m */,
 				9CB3E3831E84EE6800DF934C /* ViewController.h */,
 				9CB3E3841E84EE6800DF934C /* ViewController.m */,
+				9CB3E3941E84F80900DF934C /* DownloadCell.h */,
+				9CB3E3951E84F80900DF934C /* DownloadCell.m */,
 				9CB3E3861E84EE6800DF934C /* Assets.xcassets */,
 				9CB3E3881E84EE6800DF934C /* Main.storyboard */,
 				9CB3E38B1E84EE6800DF934C /* Info.plist */,
@@ -74,6 +83,14 @@
 				9CB3E3811E84EE6800DF934C /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9CB3E3911E84F32500DF934C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9CB3E3921E84F32600DF934C /* SGDownload.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,7 +110,7 @@
 			);
 			name = "demo-macos";
 			productName = "demo-macos";
-			productReference = 9CB3E37A1E84EE6800DF934C /* demo-macos.app */;
+			productReference = 9CB3E37A1E84EE6800DF934C /* SGDownload.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -147,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CB3E3851E84EE6800DF934C /* ViewController.m in Sources */,
+				9CB3E3961E84F80900DF934C /* DownloadCell.m in Sources */,
 				9CB3E3821E84EE6800DF934C /* main.m in Sources */,
 				9CB3E37F1E84EE6800DF934C /* AppDelegate.m in Sources */,
 			);
@@ -262,7 +280,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Debug;
 		};
@@ -275,7 +293,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-macos";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SGDownload;
 			};
 			name = Release;
 		};
