@@ -2,15 +2,12 @@
 //  main.m
 //  demo-macos
 //
-//  Created by Single on 2017/3/23.
+//  Created by Single on 2017/3/24.
 //  Copyright © 2017年 Single. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "AppDelegate.h"
+#import <Cocoa/Cocoa.h>
 
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
-    }
+int main(int argc, const char * argv[]) {
+    return NSApplicationMain(argc, argv);
 }
