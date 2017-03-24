@@ -39,6 +39,7 @@ extern NSString * const SGDownloadDefaultIdentifier;
 @property (nonatomic, strong, readonly) NSURLSessionConfiguration * sessionConfiguration;
 
 @property (nonatomic, weak) id <SGDownloadDelegate> delegate;
+@property (nonatomic, strong, readonly) dispatch_queue_t delegateQueue;       // default is main queue;
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
 
 @property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;

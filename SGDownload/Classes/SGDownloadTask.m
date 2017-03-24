@@ -82,12 +82,14 @@
 {
     if (_state != state) {
         _state = state;
-        if ([self.delegate respondsToSelector:@selector(taskStateDidChange:)]) {
-            [self.delegate taskStateDidChange:self];
-        }
-        if ([self.download.delegate respondsToSelector:@selector(download:taskStateDidChange:)]) {
-            [self.download.delegate download:self.download taskStateDidChange:self];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(taskStateDidChange:)]) {
+                [self.delegate taskStateDidChange:self];
+            }
+            if ([self.download.delegate respondsToSelector:@selector(download:taskStateDidChange:)]) {
+                [self.download.delegate download:self.download taskStateDidChange:self];
+            }
+        });
     }
     if (_state != SGDownloadTaskStateFailured) {
         self.error = nil;
@@ -105,12 +107,14 @@
     self.totalBytesWritten = totalBytesWritten;
     self.totalBytesExpectedToWrite = totalBytesExpectedToWrite;
     
-    if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
-        [self.delegate taskProgressDidChange:self];
-    }
-    if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
-        [self.download.delegate download:self.download taskProgressDidChange:self];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(taskProgressDidChange:)]) {
+            [self.delegate taskProgressDidChange:self];
+        }
+        if ([self.download.delegate respondsToSelector:@selector(download:taskProgressDidChange:)]) {
+            [self.download.delegate download:self.download taskProgressDidChange:self];
+        }
+    });
 }
 
 - (void)setResumeFileOffset:(int64_t)resumeFileOffset resumeExpectedTotalBytes:(int64_t)resumeExpectedTotalBytes

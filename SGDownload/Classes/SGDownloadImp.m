@@ -27,13 +27,13 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @interface SGDownload () <NSURLSessionDownloadDelegate>
 
 @property (nonatomic, strong) NSURLSession * session;
+@property (nonatomic, strong) NSOperationQueue * sessionDelegateQueue;
 @property (nonatomic, copy) void(^backgroundCompletionHandler)();
 
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
 @property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
 
-@property (nonatomic, strong) NSOperationQueue * delegateQueue;
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
 
@@ -71,6 +71,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (self = [super init]) {
         self->_identifier = identifier;
         self->_sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
+        self->_delegateQueue = dispatch_get_main_queue();
         self.maxConcurrentOperationCount = 1;
         self.taskQueue = [SGDownloadTaskQueue queueWithDownload:self];
         self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
@@ -91,13 +92,13 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
     self.concurrentSemaphore = dispatch_semaphore_create(self.maxConcurrentOperationCount);
     
-    self.delegateQueue = [[NSOperationQueue alloc] init];
-    self.delegateQueue.maxConcurrentOperationCount = 1;
-    self.delegateQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+    self.sessionDelegateQueue = [[NSOperationQueue alloc] init];
+    self.sessionDelegateQueue.maxConcurrentOperationCount = 1;
+    self.sessionDelegateQueue.qualityOfService = NSQualityOfServiceUserInteractive;
     
     self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration
                                                  delegate:self
-                                            delegateQueue:self.delegateQueue];
+                                            delegateQueue:self.sessionDelegateQueue];
     
     Ivar ivar = class_getInstanceVariable(NSClassFromString(@"__NSURLBackgroundSession"), "_tasks");
     if (ivar) {
