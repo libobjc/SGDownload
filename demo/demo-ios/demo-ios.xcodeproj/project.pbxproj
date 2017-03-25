@@ -294,7 +294,7 @@
 				INFOPLIST_FILE = "demo-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.libobjc.SGDownload-demo-ios";
 				PRODUCT_NAME = SGDownload;
 			};
 			name = Debug;
@@ -308,7 +308,7 @@
 				INFOPLIST_FILE = "demo-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.SGDownload.demo-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.libobjc.SGDownload-demo-ios";
 				PRODUCT_NAME = SGDownload;
 			};
 			name = Release;
