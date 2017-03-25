@@ -77,6 +77,17 @@
     [self.download suspendAllTasks];
 }
 
+
+#pragma mark - SGDownload
+
+- (void)downloadDidCompleteAllRunningTasks:(SGDownload *)download
+{
+    NSLog(@"%s", __func__);
+}
+
+
+#pragma mark - TableView
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;

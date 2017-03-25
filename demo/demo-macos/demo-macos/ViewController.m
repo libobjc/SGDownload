@@ -72,6 +72,17 @@
     [self.download suspendAllTasks];
 }
 
+
+#pragma mark - SGDownload
+
+- (void)downloadDidCompleteAllRunningTasks:(SGDownload *)download
+{
+    NSLog(@"%s", __func__);
+}
+
+
+#pragma mark - TableView
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     return self.download.tasks.count;
