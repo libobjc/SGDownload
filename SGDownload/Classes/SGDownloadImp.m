@@ -15,12 +15,6 @@
 
 #import <objc/message.h>
 
-#if TARGET_OS_OSX
-#import <AppKit/AppKit.h>
-#elif TARGET_OS_IOS || TARGET_OS_TV
-#import <UIKit/UIKit.h>
-#endif
-
 NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @interface SGDownload () <NSURLSessionDownloadDelegate>
@@ -91,7 +85,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         self.maxConcurrentOperationCount = 1;
         self.taskQueue = [SGDownloadTaskQueue queueWithDownload:self];
         self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];
-        [self setupNotification];
     }
     return self;
 }
@@ -271,6 +264,11 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return [self.taskQueue tasksWithState:state];
 }
 
+- (void)dealloc
+{
+    [self invalidate];
+}
+
 
 #pragma mark - NSURLSessionDownloadDelegate
 
@@ -382,33 +380,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     tuple.downloadTask.resumeFileOffset = fileOffset;
     tuple.downloadTask.resumeExpectedTotalBytes = expectedTotalBytes;
     [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
-}
-
-
-#pragma mark - Notification
-
-- (void)setupNotification
-{
-    NSNotificationName name = nil;
-#if TARGET_OS_OSX
-    name = NSApplicationWillTerminateNotification;
-#elif TARGET_OS_IOS || TARGET_OS_TV
-    name = UIApplicationWillTerminateNotification;
-#endif
-    if (name) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:name object:nil];
-    }
-}
-
-- (void)applicationWillTerminate
-{
-    [self.taskQueue archive];
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self invalidate];
 }
 
 @end

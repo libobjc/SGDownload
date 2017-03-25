@@ -10,6 +10,12 @@
 #import "SGDownloadImp.h"
 #import "SGDownloadTaskPrivate.h"
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#elif TARGET_OS_IOS || TARGET_OS_TV
+#import <UIKit/UIKit.h>
+#endif
+
 @interface SGDownloadTaskQueue ()
 
 @property (nonatomic, copy) NSString * archiverPath;
@@ -36,6 +42,7 @@
         }
         self.condition = [[NSCondition alloc] init];
         [self resetQueue];
+        [self setupNotification];
     }
     return self;
 }
@@ -313,6 +320,33 @@
     [self.condition broadcast];
     [self.condition unlock];
     [self archive];
+}
+
+
+#pragma mark - Notification
+
+- (void)setupNotification
+{
+    NSNotificationName name = nil;
+#if TARGET_OS_OSX
+    name = NSApplicationWillTerminateNotification;
+#elif TARGET_OS_IOS || TARGET_OS_TV
+    name = UIApplicationWillTerminateNotification;
+#endif
+    if (name) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:name object:nil];
+    }
+}
+
+- (void)applicationWillTerminate
+{
+    [self archive];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self invalidate];
 }
 
 @end
