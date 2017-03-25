@@ -188,14 +188,14 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return [self.taskQueue taskWithContentURL:contentURL];
 }
 
-- (void)downloadTask:(SGDownloadTask *)task
+- (void)addDownloadTask:(SGDownloadTask *)task
 {
-    [self.taskQueue downloadTask:task];
+    [self.taskQueue addDownloadTask:task];
 }
 
-- (void)downloadTasks:(NSArray<SGDownloadTask *> *)tasks
+- (void)addDownloadTasks:(NSArray<SGDownloadTask *> *)tasks
 {
-    [self.taskQueue downloadTasks:tasks];
+    [self.taskQueue addDownloadTasks:tasks];
 }
 
 - (void)addSuppendTask:(SGDownloadTask *)task

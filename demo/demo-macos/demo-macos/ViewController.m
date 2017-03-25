@@ -52,7 +52,7 @@
             [tasks addObject:task];
         }
     }
-    [self.download downloadTasks:tasks];
+    [self.download addDownloadTasks:tasks];
     [self.tableView reloadData];
 }
 
@@ -139,7 +139,7 @@
     switch (task.state) {
         case SGDownloadTaskStateNone:
         case SGDownloadTaskStateFailured:
-            [self.download downloadTask:task];
+            [self.download addDownloadTask:task];
             break;
         case SGDownloadTaskStateWaiting:
         case SGDownloadTaskStateRunning:

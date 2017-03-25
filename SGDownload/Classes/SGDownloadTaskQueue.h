@@ -26,8 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state;
 
 - (nullable SGDownloadTask *)downloadTaskSync;
-- (void)downloadTask:(SGDownloadTask *)task;
-- (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks;
+- (void)addDownloadTask:(SGDownloadTask *)task;
+- (void)addDownloadTasks:(NSArray <SGDownloadTask *> *)tasks;
 
 - (void)addSuppendTask:(SGDownloadTask *)task;
 - (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks;

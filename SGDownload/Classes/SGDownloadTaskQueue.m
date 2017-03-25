@@ -144,14 +144,14 @@
     return task;
 }
 
-- (void)downloadTask:(SGDownloadTask *)task
+- (void)addDownloadTask:(SGDownloadTask *)task
 {
     if (task) {
-        [self downloadTasks:@[task]];
+        [self addDownloadTasks:@[task]];
     }
 }
 
-- (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks
+- (void)addDownloadTasks:(NSArray <SGDownloadTask *> *)tasks
 {
     if (self.closed) return;
     if (tasks.count <= 0) return;
