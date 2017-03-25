@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol SGDownloadDelegate <NSObject>
 
 @optional;
-- (void)downloadDidCompleteAllRunningTasks:(SGDownload *)download;
+- (void)downloadDidCompleteAllRunningTasks:(SGDownload *)download;      // maybe finished, canceled and failured.
 - (void)download:(SGDownload *)download taskStateDidChange:(SGDownloadTask *)task;
 - (void)download:(SGDownload *)download taskProgressDidChange:(SGDownloadTask *)task;
 
