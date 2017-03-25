@@ -184,6 +184,36 @@
     [self archive];
 }
 
+- (void)addSuppendTask:(SGDownloadTask *)task
+{
+    if (task) {
+        [self addSuppendTasks:@[task]];
+    }
+}
+
+- (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks
+{
+    if (tasks.count <= 0) return;
+    if (self.closed) return;
+    [self.condition lock];
+    for (SGDownloadTask * obj in tasks) {
+        if (![self.tasks containsObject:obj]) {
+            [self.tasks addObject:obj];
+        }
+        switch (obj.state) {
+            case SGDownloadTaskStateNone:
+            case SGDownloadTaskStateWaiting:
+            case SGDownloadTaskStateRunning:
+                obj.state = SGDownloadTaskStateSuspend;
+                break;
+            default:
+                break;
+        }
+    }
+    [self.condition unlock];
+    [self archive];
+}
+
 - (void)resumeAllTasks
 {
     [self resumeTasks:self.tasks];
@@ -199,11 +229,8 @@
 - (void)resumeTasks:(NSArray<SGDownloadTask *> *)tasks
 {
     if (tasks.count <= 0) return;
+    if (self.closed) return;
     [self.condition lock];
-    if (self.closed) {
-        [self.condition unlock];
-        return;
-    }
     BOOL needSignal = NO;
     for (SGDownloadTask * task in tasks) {
         switch (task.state) {

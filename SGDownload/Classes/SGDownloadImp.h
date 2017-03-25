@@ -55,6 +55,9 @@ extern NSString * const SGDownloadDefaultIdentifier;
 - (void)downloadTask:(SGDownloadTask *)task;
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks;
 
+- (void)addSuppendTask:(SGDownloadTask *)task;
+- (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks;
+
 - (void)resumeAllTasks;
 - (void)resumeTask:(SGDownloadTask *)task;
 - (void)resumeTasks:(NSArray <SGDownloadTask *> *)tasks;

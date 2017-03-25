@@ -198,6 +198,16 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     [self.taskQueue downloadTasks:tasks];
 }
 
+- (void)addSuppendTask:(SGDownloadTask *)task
+{
+    [self.taskQueue addSuppendTask:task];
+}
+
+- (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks
+{
+    [self.taskQueue addSuppendTasks:tasks];
+}
+
 - (void)resumeAllTasks
 {
     [self.taskQueue resumeAllTasks];
@@ -259,7 +269,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return [self.taskQueue tasksRunningOrWatting];
 }
 
-- (NSMutableArray<SGDownloadTask *> *)tasksWithState:(id)state
+- (NSMutableArray<SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state
 {
     return [self.taskQueue tasksWithState:state];
 }
