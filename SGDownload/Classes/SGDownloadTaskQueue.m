@@ -8,7 +8,6 @@
 
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadImp.h"
-#import "SGDownloadTask.h"
 #import "SGDownloadTaskPrivate.h"
 
 @interface SGDownloadTaskQueue ()
@@ -53,7 +52,23 @@
     [self.condition unlock];
 }
 
-- (NSMutableArray<SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state
+- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == SGDownloadTaskStateRunning || obj.state == SGDownloadTaskStateWaiting) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    return temp;
+}
+
+- (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state
 {
     [self.condition lock];
     NSMutableArray * temp = [NSMutableArray array];

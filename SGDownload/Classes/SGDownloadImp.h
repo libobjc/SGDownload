@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <TargetConditionals.h>
+#import "SGDownloadTask.h"
 @class SGDownload;
-@class SGDownloadTask;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol SGDownloadDelegate <NSObject>
 
 @optional;
+- (void)downloadDidCompleteAllRunningTasks:(SGDownload *)download;
 - (void)download:(SGDownload *)download taskStateDidChange:(SGDownloadTask *)task;
 - (void)download:(SGDownload *)download taskProgressDidChange:(SGDownloadTask *)task;
 
@@ -46,6 +47,8 @@ extern NSString * const SGDownloadDefaultIdentifier;
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
 
 @property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;
+- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting;
+- (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state;
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;    // if return nil, there is no task of the contentURL;
 

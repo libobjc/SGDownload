@@ -54,8 +54,8 @@
             task = [SGDownloadTask taskWithTitle:[NSString stringWithFormat:@"%d", i]
                                       contentURL:contentURL
                                          fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
+            [tasks addObject:task];
         }
-        [tasks addObject:task];
     }
     [self.download downloadTasks:tasks];
     [self.tableView reloadData];

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, readonly) SGDownload * download;
 
 @property (nonatomic, strong, readonly) NSMutableArray <SGDownloadTask *> * tasks;
+- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting;
 - (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state;
 
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;

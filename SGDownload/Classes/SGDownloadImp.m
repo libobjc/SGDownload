@@ -7,7 +7,6 @@
 //
 
 #import "SGDownloadImp.h"
-#import "SGDownloadTask.h"
 #import "SGDownloadTaskPrivate.h"
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
@@ -264,6 +263,16 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return self.taskQueue.tasks;
 }
 
+- (NSMutableArray<SGDownloadTask *> *)tasksRunningOrWatting
+{
+    return [self.taskQueue tasksRunningOrWatting];
+}
+
+- (NSMutableArray<SGDownloadTask *> *)tasksWithState:(id)state
+{
+    return [self.taskQueue tasksWithState:state];
+}
+
 
 #pragma mark - NSURLSessionDownloadDelegate
 
@@ -312,8 +321,15 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     [self.taskQueue setTaskState:tuple.downloadTask state:state];
     [self.taskTupleQueue removeTuple:tuple];
-    dispatch_semaphore_signal(self.concurrentSemaphore);
     [self.taskQueue archive];
+    if ([self.taskQueue tasksRunningOrWatting].count <= 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(downloadDidCompleteAllRunningTasks:)]) {
+                [self.delegate downloadDidCompleteAllRunningTasks:self];
+            }
+        });
+    }
+    dispatch_semaphore_signal(self.concurrentSemaphore);
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
