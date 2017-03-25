@@ -153,12 +153,9 @@
 
 - (void)downloadTasks:(NSArray <SGDownloadTask *> *)tasks
 {
+    if (self.closed) return;
     if (tasks.count <= 0) return;
     [self.condition lock];
-    if (self.closed) {
-        [self.condition unlock];
-        return;
-    }
     BOOL needSignal = NO;
     for (SGDownloadTask * obj in tasks) {
         if (![self.tasks containsObject:obj]) {
@@ -194,7 +191,6 @@
 - (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks
 {
     if (tasks.count <= 0) return;
-    if (self.closed) return;
     [self.condition lock];
     for (SGDownloadTask * obj in tasks) {
         if (![self.tasks containsObject:obj]) {
@@ -228,8 +224,8 @@
 
 - (void)resumeTasks:(NSArray<SGDownloadTask *> *)tasks
 {
-    if (tasks.count <= 0) return;
     if (self.closed) return;
+    if (tasks.count <= 0) return;
     [self.condition lock];
     BOOL needSignal = NO;
     for (SGDownloadTask * task in tasks) {
@@ -268,10 +264,6 @@
 {
     if (tasks.count <= 0) return;
     [self.condition lock];
-    if (self.closed) {
-        [self.condition unlock];
-        return;
-    }
     for (SGDownloadTask * task in tasks) {
         switch (task.state) {
             case SGDownloadTaskStateNone:
@@ -303,10 +295,6 @@
 {
     if (tasks.count <= 0) return;
     [self.condition lock];
-    if (self.closed) {
-        [self.condition unlock];
-        return;
-    }
     NSMutableArray <SGDownloadTask *> * temp = [NSMutableArray array];
     for (SGDownloadTask * task in tasks) {
         if ([self.tasks containsObject:task]) {
