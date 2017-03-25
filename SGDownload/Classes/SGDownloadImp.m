@@ -68,8 +68,8 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (NSString *)archiverDirectoryPath
 {
-    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString * archiverDirectoryPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadArchiver"];
+    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+    NSString * archiverDirectoryPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadArchive"];
     BOOL isDirectory;
     BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:archiverDirectoryPath isDirectory:&isDirectory];
     if (!result || !isDirectory) {
@@ -80,7 +80,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier
 {
-    return [[self archiverDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.SGDownloadArchiver", identifier]];
+    return [[self archiverDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.archive", identifier]];
 }
 
 - (instancetype)initWithIdentifier:(NSString *)identifier
