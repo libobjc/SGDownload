@@ -86,6 +86,7 @@
 
 - (SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL
 {
+    if (contentURL.absoluteString.length <= 0) return nil;
     [self.condition lock];
     SGDownloadTask * task = nil;
     for (SGDownloadTask * obj in self.tasks) {
@@ -100,6 +101,7 @@
 
 - (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state
 {
+    if (!task) return;
     [self.condition lock];
     task.state = state;
     [self.condition unlock];
@@ -107,6 +109,7 @@
 
 - (SGDownloadTask *)downloadTaskSync
 {
+    if (self.closed) return nil;
     [self.condition lock];
     SGDownloadTask * task;
     do {
@@ -185,6 +188,7 @@
 
 - (void)resumeTasks:(NSArray<SGDownloadTask *> *)tasks
 {
+    if (tasks.count <= 0) return;
     [self.condition lock];
     if (self.closed) {
         [self.condition unlock];
@@ -224,6 +228,7 @@
 
 - (void)suspendTasks:(NSArray<SGDownloadTask *> *)tasks
 {
+    if (tasks.count <= 0) return;
     [self.condition lock];
     if (self.closed) {
         [self.condition unlock];
@@ -257,6 +262,7 @@
 
 - (void)cancelTasks:(NSArray<SGDownloadTask *> *)tasks
 {
+    if (tasks.count <= 0) return;
     [self.condition lock];
     if (self.closed) {
         [self.condition unlock];
