@@ -53,6 +53,22 @@
     [self.condition unlock];
 }
 
+- (NSMutableArray<SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == state) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    return temp;
+}
+
 - (SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL
 {
     [self.condition lock];
