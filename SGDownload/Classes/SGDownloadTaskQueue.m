@@ -50,6 +50,7 @@
         }
     }
     [self.condition unlock];
+    [self archive];
 }
 
 - (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting
@@ -105,6 +106,7 @@
     [self.condition lock];
     task.state = state;
     [self.condition unlock];
+    [self archive];
 }
 
 - (SGDownloadTask *)downloadTaskSync
@@ -172,6 +174,7 @@
         [self.condition signal];
     }
     [self.condition unlock];
+    [self archive];
 }
 
 - (void)resumeAllTasks
@@ -212,6 +215,7 @@
         [self.condition signal];
     }
     [self.condition unlock];
+    [self archive];
 }
 
 - (void)suspendAllTasks
@@ -246,6 +250,7 @@
         }
     }
     [self.condition unlock];
+    [self archive];
 }
 
 - (void)cancelAllTasks
@@ -280,6 +285,7 @@
         [self.tasks removeObject:task];
     }
     [self.condition unlock];
+    [self archive];
 }
 
 - (void)archive
@@ -306,6 +312,7 @@
     }
     [self.condition broadcast];
     [self.condition unlock];
+    [self archive];
 }
 
 @end

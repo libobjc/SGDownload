@@ -131,7 +131,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
                 }
                 SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:obj];
                 [self.taskTupleQueue addTuple:tuple];
-                [self.taskQueue archive];
                 dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
             }];
         }
@@ -168,7 +167,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:sessionTask];
             [self.taskTupleQueue addTuple:tuple];
             [sessionTask resume];
-            [self.taskQueue archive];
         }
     }
 }
@@ -321,7 +319,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     [self.taskQueue setTaskState:tuple.downloadTask state:state];
     [self.taskTupleQueue removeTuple:tuple];
-    [self.taskQueue archive];
     if ([self.taskQueue tasksRunningOrWatting].count <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([self.delegate respondsToSelector:@selector(downloadDidCompleteAllRunningTasks:)]) {
@@ -371,11 +368,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
     if (!tuple) return;
     
-    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
     [tuple.downloadTask setBytesWritten:bytesWritten
                       totalBytesWritten:totalBytesWritten
               totalBytesExpectedToWrite:totalBytesExpectedToWrite];
-    [self.taskQueue archive];
+    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
@@ -383,10 +379,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
     if (!tuple) return;
     
-    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
     tuple.downloadTask.resumeFileOffset = fileOffset;
     tuple.downloadTask.resumeExpectedTotalBytes = expectedTotalBytes;
-    [self.taskQueue archive];
+    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
 }
 
 
