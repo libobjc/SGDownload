@@ -16,8 +16,7 @@
 
 - (SGDownloadTuple *)tupleWithDownloadTask:(SGDownloadTask *)downloadTask;
 - (NSArray <SGDownloadTuple *> *)tuplesWithDownloadTasks:(NSArray <SGDownloadTask *> *)downloadTasks;
-- (SGDownloadTuple *)tupleWithSessionTask:(NSURLSessionDownloadTask *)sessionTask;
-- (NSArray <SGDownloadTuple *> *)tuplesWithSessionTasks:(NSArray <NSURLSessionDownloadTask *> *)sessionTasks;
+- (SGDownloadTuple *)tupleWithDownloadTask:(SGDownloadTask *)downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask;
 
 - (void)addTuple:(SGDownloadTuple *)tuple;
 - (void)removeTuple:(SGDownloadTuple *)tuple;

@@ -59,35 +59,20 @@
     }
 }
 
-- (SGDownloadTuple *)tupleWithSessionTask:(NSURLSessionDownloadTask *)sessionTask
+- (SGDownloadTuple *)tupleWithDownloadTask:(SGDownloadTask *)downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask
 {
-    [self.tupleLock lock];
-    SGDownloadTuple * tuple = nil;
-    for (SGDownloadTuple * obj in self.tuples) {
-        if (obj.sessionTask == sessionTask) {
-            tuple = obj;
-            break;
-        }
-    }
-    [self.tupleLock unlock];
-    return tuple;
-}
-
-- (NSArray<SGDownloadTuple *> *)tuplesWithSessionTasks:(NSArray<NSURLSessionDownloadTask *> *)sessionTasks
-{
-    [self.tupleLock lock];
-    NSMutableArray * temp = [NSMutableArray array];
-    for (SGDownloadTuple * obj in self.tuples) {
-        if ([sessionTasks containsObject:obj.sessionTask]) {
-            [temp addObject:obj];
-        }
-    }
-    [self.tupleLock unlock];
-    if (temp.count > 0) {
-        return temp;
-    } else {
+    if (!downloadTask) {
         return nil;
     }
+    SGDownloadTuple * tuple = [self tupleWithDownloadTask:downloadTask];
+    if (tuple) {
+        return tuple;
+    }
+    [self.tupleLock lock];
+    tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:sessionTask];
+    [self.tuples addObject:tuple];
+    [self.tupleLock unlock];
+    return tuple;
 }
 
 - (void)addTuple:(SGDownloadTuple *)tuple

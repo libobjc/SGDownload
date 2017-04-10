@@ -60,6 +60,22 @@
     [self archive];
 }
 
+- (NSMutableArray <SGDownloadTask *> *)tasksRunning
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == SGDownloadTaskStateRunning) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    return temp;
+}
+
 - (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting
 {
     [self.condition lock];
@@ -110,6 +126,7 @@
 - (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state
 {
     if (!task) return;
+    if (task.state == state) return;
     [self.condition lock];
     task.state = state;
     [self.condition unlock];
@@ -339,7 +356,6 @@
 
 
 #pragma mark - Notification
-
 - (void)setupNotification
 {
     NSNotificationName name = nil;

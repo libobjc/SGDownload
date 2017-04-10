@@ -25,7 +25,8 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
-@property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
+@property (nonatomic, strong) NSCondition * concurrentCondition;
+@property (nonatomic, strong) NSCondition * lastResumeLock;
 
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
@@ -99,12 +100,15 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (self.maxConcurrentOperationCount <= 0) {
         self.maxConcurrentOperationCount = 1;
     }
-    self.concurrentSemaphore = dispatch_semaphore_create(self.maxConcurrentOperationCount);
+    self.concurrentCondition = [[NSCondition alloc] init];
+    self.lastResumeLock = [[NSLock alloc] init];
     
     self.sessionDelegateQueue = [[NSOperationQueue alloc] init];
     self.sessionDelegateQueue.maxConcurrentOperationCount = 1;
     self.sessionDelegateQueue.qualityOfService = NSQualityOfServiceUserInteractive;
+    self.sessionDelegateQueue.suspended = YES;
     
+    [self.lastResumeLock lock];
     self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration
                                                  delegate:self
                                             delegateQueue:self.sessionDelegateQueue];
@@ -113,21 +117,19 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     if (ivar) {
         NSDictionary <NSNumber *, NSURLSessionDownloadTask *> * lastTasks = object_getIvar(self.session, ivar);
         if (lastTasks && lastTasks.count > 0) {
-            if (self.maxConcurrentOperationCount < lastTasks.count) {
-                self.maxConcurrentOperationCount = lastTasks.count;
-                self.concurrentSemaphore = dispatch_semaphore_create(self.maxConcurrentOperationCount);
-            }
-            [lastTasks enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSURLSessionDownloadTask * _Nonnull obj, BOOL * _Nonnull stop) {
-                SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:obj.currentRequest.URL];
-                if (obj.state == NSURLSessionTaskStateRunning) {
+            for (NSNumber * key in lastTasks) {
+                NSURLSessionDownloadTask * obj = [lastTasks objectForKey:key];
+                SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:obj.originalRequest.URL];
+                if (downloadTask) {
                     [self.taskQueue setTaskState:downloadTask state:SGDownloadTaskStateRunning];
+                    SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:obj];
+                    [self.taskTupleQueue addTuple:tuple];
                 }
-                SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:obj];
-                [self.taskTupleQueue addTuple:tuple];
-                dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
-            }];
+            }
         }
     }
+    [self.lastResumeLock unlock];
+    self.sessionDelegateQueue.suspended = NO;
     
     self.downloadOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(downloadOperationHandler) object:nil];
     self.downloadOperationQueue = [[NSOperationQueue alloc] init];
@@ -144,7 +146,11 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             if (self.closed) {
                 break;
             }
-            dispatch_semaphore_wait(self.concurrentSemaphore, DISPATCH_TIME_FOREVER);
+            [self.concurrentCondition lock];
+            while (self.taskTupleQueue.tuples.count >= self.maxConcurrentOperationCount) {
+                [self.concurrentCondition wait];
+            }
+            [self.concurrentCondition unlock];
             SGDownloadTask * downloadTask = [self.taskQueue downloadTaskSync];
             if (!downloadTask) {
                 break;
@@ -175,7 +181,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         [self.session invalidateAndCancel];
         [self.downloadOperationQueue cancelAllOperations];
         self.downloadOperation = nil;
-        dispatch_semaphore_signal(self.concurrentSemaphore);
+        [self.concurrentCondition broadcast];
         [downloads removeObject:self];
     }];
 }
@@ -295,14 +301,22 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     }
 }
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)sessionTask didCompleteWithError:(NSError *)error
 {
-    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:(NSURLSessionDownloadTask *)task];
-    if (!tuple) return;
+    [self.lastResumeLock lock];
+    [self.concurrentCondition lock];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
+    if (!tuple) {
+        [self.concurrentCondition signal];
+        [self.concurrentCondition unlock];
+        [self.lastResumeLock unlock];
+        return;
+    }
     
     [tuple.downloadTask setBytesWritten:0
-                      totalBytesWritten:task.countOfBytesReceived
-              totalBytesExpectedToWrite:task.countOfBytesExpectedToReceive];
+                      totalBytesWritten:sessionTask.countOfBytesReceived
+              totalBytesExpectedToWrite:sessionTask.countOfBytesExpectedToReceive];
     
     SGDownloadTaskState state;
     if (error) {
@@ -334,13 +348,20 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             }
         });
     }
-    dispatch_semaphore_signal(self.concurrentSemaphore);
+    [self.concurrentCondition signal];
+    [self.concurrentCondition unlock];
+    [self.lastResumeLock unlock];
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didFinishDownloadingToURL:(NSURL *)location
 {
-    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
-    if (!tuple) return;
+    [self.lastResumeLock lock];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
+    if (!tuple) {
+        [self.lastResumeLock unlock];
+        return;
+    }
     
     NSString * path = location.path;
     BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
@@ -349,6 +370,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         exists = [[NSFileManager defaultManager] fileExistsAtPath:path];
         if (!exists) {
             tuple.downloadTask.error = [NSError errorWithDomain:@"download file is deleted" code:-1 userInfo:nil];
+            [self.lastResumeLock unlock];
             return;
         }
     }
@@ -369,27 +391,40 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     NSError * error;
     [[NSFileManager defaultManager] moveItemAtPath:path toPath:filePath error:&error];
     tuple.downloadTask.error = error;
+    [self.lastResumeLock unlock];
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
-    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
-    if (!tuple) return;
+    [self.lastResumeLock lock];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
+    if (!tuple) {
+        [self.lastResumeLock unlock];
+        return;
+    }
     
     [tuple.downloadTask setBytesWritten:bytesWritten
                       totalBytesWritten:totalBytesWritten
               totalBytesExpectedToWrite:totalBytesExpectedToWrite];
     [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    [self.lastResumeLock unlock];
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
 {
-    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithSessionTask:downloadTask];
-    if (!tuple) return;
+    [self.lastResumeLock lock];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
+    if (!tuple) {
+        [self.lastResumeLock unlock];
+        return;
+    }
     
     tuple.downloadTask.resumeFileOffset = fileOffset;
     tuple.downloadTask.resumeExpectedTotalBytes = expectedTotalBytes;
     [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    [self.lastResumeLock unlock];
 }
 
 @end
