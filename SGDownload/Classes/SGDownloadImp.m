@@ -244,7 +244,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)suspendTasks:(NSArray<SGDownloadTask *> *)tasks
 {
     [self.taskQueue suspendTasks:tasks];
-    [self.taskTupleQueue cancelDownloadTasks:tasks resume:YES completionHandler:nil];
+    [self.lastResumeLock lock];
+    [self.taskTupleQueue cancelDownloadTasks:tasks resume:YES completionHandler:^(NSArray<SGDownloadTuple *> *tuples) {
+        [self.lastResumeLock unlock];
+    }];
 }
 
 - (void)cancelAllTasks
