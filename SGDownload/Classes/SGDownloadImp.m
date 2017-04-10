@@ -26,7 +26,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
 @property (nonatomic, strong) NSCondition * concurrentCondition;
-@property (nonatomic, strong) NSCondition * lastResumeLock;
+@property (nonatomic, strong) NSLock * lastResumeLock;
 
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
@@ -341,7 +341,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     [self.taskQueue setTaskState:tuple.downloadTask state:state];
     [self.taskTupleQueue removeTuple:tuple];
-    if ([self.taskQueue tasksRunningOrWatting].count <= 0) {
+    if ([self.taskQueue tasksRunningOrWatting].count <= 0 && self.taskTupleQueue.tuples.count <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([self.delegate respondsToSelector:@selector(downloadDidCompleteAllRunningTasks:)]) {
                 [self.delegate downloadDidCompleteAllRunningTasks:self];
@@ -407,7 +407,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     [tuple.downloadTask setBytesWritten:bytesWritten
                       totalBytesWritten:totalBytesWritten
               totalBytesExpectedToWrite:totalBytesExpectedToWrite];
-    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    if (tuple.downloadTask.state != SGDownloadTaskStateSuspend) {
+        [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    }
     [self.lastResumeLock unlock];
 }
 
@@ -423,7 +425,9 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     
     tuple.downloadTask.resumeFileOffset = fileOffset;
     tuple.downloadTask.resumeExpectedTotalBytes = expectedTotalBytes;
-    [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    if (tuple.downloadTask.state != SGDownloadTaskStateSuspend) {
+        [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
+    }
     [self.lastResumeLock unlock];
 }
 
