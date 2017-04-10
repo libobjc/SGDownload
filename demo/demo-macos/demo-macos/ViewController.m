@@ -29,7 +29,7 @@
 {
     self.download = [SGDownload download];
     self.download.delegate = self;
-    self.download.maxConcurrentOperationCount = 3;
+    self.download.maxConcurrentOperationCount = 10;
     [self.download run];
 }
 
@@ -39,16 +39,16 @@
     NSString * desPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadData"];
     
     NSMutableArray <SGDownloadTask *> * tasks = [NSMutableArray array];
-    for (int i = 1; i<=10; i++)
+    for (int i = 1; i <= 2632; i++)
     {
-        NSString * URLString = [NSString stringWithFormat:@"http://120.25.226.186:32812/resources/videos/minion_%02d.mp4", i];
+        NSString * URLString = [NSString stringWithFormat:@"http://sp.hls.yinyuetai.com/192.168.100.51/noencrypt/vod/850646948972212224_960-%d.ts", i];
         NSURL * contentURL = [NSURL URLWithString:URLString];
         SGDownloadTask * task = [self.download taskWithContentURL:contentURL];
         if (!task)
         {
             task = [SGDownloadTask taskWithTitle:[NSString stringWithFormat:@"%d", i]
                                       contentURL:contentURL
-                                         fileURL:[NSURL fileURLWithPath:[desPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.mp4", i]]]];
+                                         fileURL:[NSURL fileURLWithPath:[desPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.ts", i]]]];
             [tasks addObject:task];
         }
     }
