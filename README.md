@@ -1,5 +1,11 @@
 # SGDownload
 
+## English Document
+
+SGDownload is a big files download manager based on NSURLSession, support background download, multitasking download. iOS, macOS, and tvOS.
+
+## 中文文档
+
 SGDownload 是一个文件下载器。非常适合用于视频下载，支持后台，锁屏下载。同时支持 iOS、macOS、tvOS 三个平台。
 
 ## 功能特点
