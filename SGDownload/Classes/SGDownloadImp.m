@@ -123,7 +123,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         if (lastTasks && lastTasks.count > 0) {
             for (NSNumber * key in lastTasks) {
                 NSURLSessionDownloadTask * obj = [lastTasks objectForKey:key];
-                SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:obj.originalRequest.URL];
+                SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:obj]];
                 if (downloadTask) {
                     [self.taskQueue setTaskState:downloadTask state:SGDownloadTaskStateRunning];
                     SGDownloadTuple * tuple = [SGDownloadTuple tupleWithDownloadTask:downloadTask sessionTask:obj];
@@ -290,7 +290,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)dealloc
 {
     [self invalidate];
-    NSLog(@"释放");
 }
 
 
@@ -313,7 +312,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 {
     [self.lastResumeLock lock];
     [self.concurrentCondition lock];
-    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:sessionTask]];
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
     if (!tuple) {
         [self.concurrentCondition signal];
@@ -364,7 +363,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didFinishDownloadingToURL:(NSURL *)location
 {
     [self.lastResumeLock lock];
-    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:sessionTask]];
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
     if (!tuple) {
         [self.lastResumeLock unlock];
@@ -405,7 +404,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     [self.lastResumeLock lock];
-    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:sessionTask]];
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
     if (!tuple) {
         [self.lastResumeLock unlock];
@@ -424,7 +423,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)sessionTask didResumeAtOffset:(int64_t)fileOffset expectedTotalBytes:(int64_t)expectedTotalBytes
 {
     [self.lastResumeLock lock];
-    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:sessionTask.originalRequest.URL];
+    SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:sessionTask]];
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
     if (!tuple) {
         [self.lastResumeLock unlock];
@@ -437,6 +436,16 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         [self.taskQueue setTaskState:tuple.downloadTask state:SGDownloadTaskStateRunning];
     }
     [self.lastResumeLock unlock];
+}
+
+- (NSURL *)getURLFromSessionTask:(NSURLSessionTask *)sessionTask
+{
+    if (sessionTask.originalRequest.URL) {
+        return sessionTask.originalRequest.URL;
+    } else if (sessionTask.currentRequest.URL) {
+        return sessionTask.currentRequest.URL;
+    }
+    return nil;
 }
 
 @end
