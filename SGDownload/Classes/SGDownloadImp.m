@@ -31,6 +31,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
 
+@property (nonatomic, assign) BOOL running;
 @property (nonatomic, assign) BOOL closed;
 
 @end
@@ -92,7 +93,10 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 - (void)run
 {
-    [self setupOperation];
+    if (!self.running) {
+        self.running = YES;
+        [self setupOperation];
+    }
 }
 
 - (void)setupOperation
@@ -286,6 +290,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 - (void)dealloc
 {
     [self invalidate];
+    NSLog(@"释放");
 }
 
 
