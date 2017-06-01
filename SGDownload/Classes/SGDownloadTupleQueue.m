@@ -152,11 +152,13 @@
     if (resume) {
         dispatch_group_t group = dispatch_group_create();
         for (SGDownloadTuple * obj in tuples) {
-            dispatch_group_enter(group);
-            [obj.sessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
-                obj.downloadTask.resumeInfoData = resumeData;
-                dispatch_group_leave(group);
-            }];
+            if (obj.sessionTask.state == NSURLSessionTaskStateRunning || obj.sessionTask.state == NSURLSessionTaskStateSuspended) {
+                dispatch_group_enter(group);
+                [obj.sessionTask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+                    obj.downloadTask.resumeInfoData = resumeData;
+                    dispatch_group_leave(group);
+                }];
+            }
         }
         dispatch_queue_t queue = [[NSOperationQueue currentQueue] underlyingQueue];
         dispatch_group_notify(group, queue, ^{
