@@ -272,6 +272,24 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     [self.taskTupleQueue cancelDownloadTasks:tasks resume:NO completionHandler:nil];
 }
 
+- (void)cancelAllTasksAndDeleteFiles
+{
+    [self.taskQueue deleteAllTaskFiles];
+    [self cancelAllTasks];
+}
+
+- (void)cancelTaskAndDeleteFile:(SGDownloadTask *)task
+{
+    [self.taskQueue deleteTaskFile:task];
+    [self cancelTask:task];
+}
+
+- (void)cancelTasksAndDeleteFiles:(NSArray <SGDownloadTask *> *)tasks
+{
+    [self.taskQueue cancelTasks:tasks];
+    [self cancelTasks:tasks];
+}
+
 - (NSArray <SGDownloadTask *> *)tasks
 {
     return self.taskQueue.tasks;

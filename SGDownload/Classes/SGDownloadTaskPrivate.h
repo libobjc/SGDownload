@@ -16,6 +16,7 @@
 @property (nonatomic, copy) NSString * title;
 @property (nonatomic, copy) NSURL * contentURL;
 @property (nonatomic, copy) NSURL * fileURL;
+@property (nonatomic, assign) BOOL fileDidRemoved;
 
 @property (nonatomic, assign) int64_t bytesWritten;
 @property (nonatomic, assign) int64_t totalBytesWritten;

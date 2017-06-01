@@ -135,6 +135,15 @@
     }
 }
 
+- (BOOL)fileIsValid
+{
+    NSInteger fileSize = [SGDownloadTools sizeWithFileURL:self.fileURL];
+    if (fileSize > 0 && fileSize >= self.totalBytesExpectedToWrite) {
+        return YES;
+    }
+    return NO;
+}
+
 - (float)progress
 {
     if (self.totalBytesExpectedToWrite <= 0 || self.totalBytesWritten <= 0) {

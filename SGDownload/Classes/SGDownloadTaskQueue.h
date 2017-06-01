@@ -45,6 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cancelTask:(SGDownloadTask *)task;
 - (void)cancelTasks:(NSArray<SGDownloadTask *> *)tasks;
 
+- (void)deleteAllTaskFiles;
+- (void)deleteTaskFile:(SGDownloadTask *)task;
+- (void)deleteTaskFiles:(NSArray <SGDownloadTask *> *)tasks;
+
 - (void)invalidate;
 - (void)archive;
 

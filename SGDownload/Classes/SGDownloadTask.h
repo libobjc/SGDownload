@@ -40,6 +40,10 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 @property (nonatomic, copy, readonly) NSString * title;
 @property (nonatomic, copy, readonly) NSURL * contentURL;
 @property (nonatomic, copy, readonly) NSURL * fileURL;
+
+@property (nonatomic, assign, readonly) BOOL fileDidRemoved;
+@property (nonatomic, assign, readonly) BOOL fileIsValid;
+
 @property (nonatomic, assign) BOOL replaceHomeDirectoryIfNeed;      // default is YES;
 
 @property (nonatomic, assign, readonly) float progress;

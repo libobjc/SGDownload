@@ -9,6 +9,7 @@
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadImp.h"
 #import "SGDownloadTaskPrivate.h"
+#import "SGDownloadTools.h"
 
 #if TARGET_OS_OSX
 #import <AppKit/AppKit.h>
@@ -325,6 +326,34 @@
     }
     [self.condition unlock];
     [self archive];
+}
+
+- (void)deleteAllTaskFiles
+{
+    [self deleteTaskFiles:self.tasks];
+}
+
+- (void)deleteTaskFile:(SGDownloadTask *)task
+{
+    if (task) {
+        [self deleteTaskFiles:@[task]];
+    }
+}
+
+- (void)deleteTaskFiles:(NSArray <SGDownloadTask *> *)tasks
+{
+    if (tasks.count <= 0) return;
+    [self.condition lock];
+    for (SGDownloadTask * task in tasks) {
+        if ([self.tasks containsObject:task]) {
+            [SGDownloadTools removeFileWithFileURL:task.fileURL];
+            task.fileDidRemoved = YES;
+        }
+    }
+    [self.condition unlock];
+    /*
+    [self archive];
+     */
 }
 
 - (void)archive

@@ -87,6 +87,10 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 - (void)cancelTask:(SGDownloadTask *)task;
 - (void)cancelTasks:(NSArray <SGDownloadTask *> *)tasks;
 
+- (void)cancelAllTasksAndDeleteFiles;
+- (void)cancelTaskAndDeleteFile:(SGDownloadTask *)task;
+- (void)cancelTasksAndDeleteFiles:(NSArray <SGDownloadTask *> *)tasks;
+
 
 // download live cycle
 - (void)run;

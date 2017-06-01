@@ -13,4 +13,7 @@
 + (NSURL *)replacehHomeDirectoryForFileURL:(NSURL *)fileURL;
 + (NSString *)replacehHomeDirectoryForFilePath:(NSString *)filePath;
 
++ (NSInteger)sizeWithFileURL:(NSURL *)fileURL;
++ (NSError *)removeFileWithFileURL:(NSURL *)fileURL;
+
 @end
