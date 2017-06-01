@@ -84,6 +84,24 @@
     [self.tupleLock unlock];
 }
 
+- (void)removeTupleWithSesstionTask:(NSURLSessionTask *)sessionTask
+{
+    if (!sessionTask) return;
+    
+    [self.tupleLock lock];
+    SGDownloadTuple * tuple = nil;
+    for (SGDownloadTuple * obj in self.tuples) {
+        if (obj.sessionTask == sessionTask) {
+            tuple = obj;
+            break;
+        }
+    }
+    if (tuple) {
+        [self.tuples removeObject:tuple];
+    }
+    [self.tupleLock unlock];
+}
+
 - (void)removeTuple:(SGDownloadTuple *)tuple
 {
     if (tuple) {

@@ -333,6 +333,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     SGDownloadTask * downloadTask = [self.taskQueue taskWithContentURL:[self getURLFromSessionTask:sessionTask]];
     SGDownloadTuple * tuple = [self.taskTupleQueue tupleWithDownloadTask:downloadTask sessionTask:(NSURLSessionDownloadTask *)sessionTask];
     if (!tuple) {
+        [self.taskTupleQueue removeTupleWithSesstionTask:sessionTask];
         [self.concurrentCondition signal];
         [self.concurrentCondition unlock];
         [self.lastResumeLock unlock];
