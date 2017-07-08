@@ -153,6 +153,7 @@
                 default:
                     break;
             }
+            if (task) break;
         }
         if (!task) {
             [self.condition wait];
