@@ -10,6 +10,9 @@
 
 @interface SGDownloadTools : NSObject
 
++ (NSString *)archiverDirectoryPath;
++ (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier;
+
 + (NSURL *)replacehHomeDirectoryForFileURL:(NSURL *)fileURL;
 + (NSString *)replacehHomeDirectoryForFilePath:(NSString *)filePath;
 

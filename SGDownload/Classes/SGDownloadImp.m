@@ -61,29 +61,11 @@ static NSMutableArray <SGDownload *> * downloads = nil;
     return obj;
 }
 
-+ (NSString *)archiverDirectoryPath
-{
-    NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-    NSString * archiverDirectoryPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadArchive"];
-    BOOL isDirectory;
-    BOOL result = [[NSFileManager defaultManager] fileExistsAtPath:archiverDirectoryPath isDirectory:&isDirectory];
-    if (!result || !isDirectory) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:archiverDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    return archiverDirectoryPath;
-}
-
-+ (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier
-{
-    return [[self archiverDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.archive", identifier]];
-}
-
 - (instancetype)initWithIdentifier:(NSString *)identifier
 {
     if (self = [super init]) {
         self->_identifier = identifier;
         self->_sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:identifier];
-        self->_delegateQueue = dispatch_get_main_queue();
         self.maxConcurrentOperationCount = 1;
         self.taskQueue = [SGDownloadTaskQueue queueWithDownload:self];
         self.taskTupleQueue = [[SGDownloadTupleQueue alloc] init];

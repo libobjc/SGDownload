@@ -36,7 +36,7 @@
 {
     if (self = [super init]) {
         self->_download = download;
-        self->_archiverPath = [SGDownload archiverFilePathWithIdentifier:download.identifier];
+        self->_archiverPath = [SGDownloadTools archiverFilePathWithIdentifier:download.identifier];
         self->_tasks = [NSKeyedUnarchiver unarchiveObjectWithFile:self.archiverPath];
         if (!self->_tasks) {
             self->_tasks = [NSMutableArray array];

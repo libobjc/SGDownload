@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <TargetConditionals.h>
 #import "SGDownloadTask.h"
-@class SGDownload;
+
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class SGDownload;
 
-// delegate
 @protocol SGDownloadDelegate <NSObject>
 
 @optional;
@@ -39,22 +39,10 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
 
 
-// archive
-+ (NSString *)archiverDirectoryPath;
-+ (NSString *)archiverFilePathWithIdentifier:(NSString *)identifier;
-
-#if TARGET_OS_IOS || TARGET_OS_TV
-// background events
-+ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
-#endif
-
-
-// configuration
 @property (nonatomic, copy, readonly) NSString * identifier;
 @property (nonatomic, strong, readonly) NSURLSessionConfiguration * sessionConfiguration;
 
 @property (nonatomic, weak) id <SGDownloadDelegate> delegate;
-@property (nonatomic, strong, readonly) dispatch_queue_t delegateQueue;       // default is main queue.
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
 
 
@@ -70,6 +58,8 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 - (void)addDownloadTask:(SGDownloadTask *)task;
 - (void)addDownloadTasks:(NSArray <SGDownloadTask *> *)tasks;
 
+
+// add suppend task
 - (void)addSuppendTask:(SGDownloadTask *)task;
 - (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks;
 
@@ -95,6 +85,12 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 // download live cycle
 - (void)run;
 - (void)invalidate;
+
+
+#if TARGET_OS_IOS || TARGET_OS_TV
+// background events
++ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
+#endif
 
 
 @end
