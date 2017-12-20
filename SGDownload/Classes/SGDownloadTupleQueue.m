@@ -159,11 +159,19 @@
 
 - (void)cancelTuples:(NSArray <SGDownloadTuple *> *)tuples resume:(BOOL)resume completionHandler:(void(^)(NSArray <SGDownloadTuple *> * tuples))completionHandler
 {
+    static dispatch_queue_t queue = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("SGDownload-Cancel-Queue", NULL);
+    });
+    
     [self.tupleLock lock];
     if (tuples.count <= 0) {
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+        dispatch_async(queue, ^{
+            if (completionHandler) {
+                completionHandler(nil);
+            }
+        });
         [self.tupleLock unlock];
         return;
     }
@@ -178,7 +186,6 @@
                 }];
             }
         }
-        dispatch_queue_t queue = [[NSOperationQueue currentQueue] underlyingQueue];
         dispatch_group_notify(group, queue, ^{
             if (completionHandler) {
                 completionHandler(tuples);
@@ -188,9 +195,11 @@
         for (SGDownloadTuple * obj in tuples) {
             [obj.sessionTask cancel];
         }
-        if (completionHandler) {
-            completionHandler(tuples);
-        }
+        dispatch_async(queue, ^{
+            if (completionHandler) {
+                completionHandler(tuples);
+            }
+        });
     }
     [self.tupleLock unlock];
 }

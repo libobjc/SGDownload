@@ -46,6 +46,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
 @property (nonatomic, strong) NSCondition * concurrentCondition;
 @property (nonatomic, strong) NSLock * lastResumeLock;
+@property (nonatomic, strong) NSCondition * invalidateConditaion;
 
 @property (nonatomic, strong) NSOperationQueue * downloadOperationQueue;
 @property (nonatomic, strong) NSInvocationOperation * downloadOperation;
@@ -75,14 +76,14 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     if (self = [super init]) {
         self.downloads = [NSMutableArray array];
         
-        NSNotificationName name = nil;
+        NSNotificationName notificationName = nil;
 #if TARGET_OS_OSX
-        name = NSApplicationWillTerminateNotification;
+        notificationName = NSApplicationWillTerminateNotification;
 #elif TARGET_OS_IOS || TARGET_OS_TV
-        name = UIApplicationWillTerminateNotification;
+        notificationName = UIApplicationWillTerminateNotification;
 #endif
-        if (name) {
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:name object:nil];
+        if (notificationName) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:notificationName object:nil];
         }
     }
     return self;
@@ -91,8 +92,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 - (void)applicationWillTerminate
 {
     [[self.downloads copy] enumerateObjectsUsingBlock:^(SGDownload * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj invalidate];
-        [obj.taskQueue invalidate];
+        [obj invalidateAsync:NO];
     }];
 }
 
@@ -142,6 +142,11 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 - (void)invalidate
 {
+    [self invalidateAsync:YES];
+}
+
+- (void)invalidateAsync:(BOOL)async
+{
     if (self.closed) return;
     
     self.closed = YES;
@@ -153,7 +158,14 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
         self.downloadOperation = nil;
         [self.concurrentCondition broadcast];
         [[SGDownloadManager manager].downloads removeObject:self];
+        [self.invalidateConditaion broadcast];
     }];
+    if (!async) {
+        if (!self.invalidateConditaion) {
+            self.invalidateConditaion = [[NSCondition alloc] init];
+        }
+        [self.invalidateConditaion wait];
+    }
 }
 
 - (void)setupOperation

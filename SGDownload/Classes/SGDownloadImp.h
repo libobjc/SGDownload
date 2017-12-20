@@ -40,7 +40,8 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 
 
 - (void)run;
-- (void)invalidate;     // if
+- (void)invalidate;         // async is YES.
+- (void)invalidateAsync:(BOOL)async;
 
 
 @property (nonatomic, copy, readonly) NSString * identifier;
