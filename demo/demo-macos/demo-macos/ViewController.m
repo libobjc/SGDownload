@@ -38,21 +38,19 @@
     NSString * documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     NSString * desPath = [documentsPath stringByAppendingPathComponent:@"SGDownloadData"];
     
-    NSMutableArray <SGDownloadTask *> * tasks = [NSMutableArray array];
-    for (int i = 1; i<=10; i++)
+    for (int i = 0; i < 6; i++)
     {
-        NSString * URLString = [NSString stringWithFormat:@"http://120.25.226.186:32812/resources/videos/minion_%02d.mp4", i];
+        NSString * URLString = [NSString stringWithFormat:@"http://oxl6mxy2t.bkt.clouddn.com/SGDownload/Okay-%d.mp4", i];
         NSURL * contentURL = [NSURL URLWithString:URLString];
         SGDownloadTask * task = [self.download taskWithContentURL:contentURL];
         if (!task)
         {
-            task = [SGDownloadTask taskWithTitle:[NSString stringWithFormat:@"%d", i]
-                                      contentURL:contentURL
-                                         fileURL:[NSURL fileURLWithPath:[desPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.mp4", i]]]];
-            [tasks addObject:task];
+            task = [SGDownloadTask taskWithContentURL:contentURL
+                                                title:[NSString stringWithFormat:@"%d", i]
+                                              fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
+            [self.download addDownloadTask:task];
         }
     }
-    [self.download addDownloadTasks:tasks];
     [self.tableView reloadData];
 }
 
