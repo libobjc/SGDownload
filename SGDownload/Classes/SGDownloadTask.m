@@ -78,6 +78,21 @@
     [aCoder encodeObject:self.error forKey:@"error"];
 }
 
+- (BOOL)isEqual:(id)object
+{
+    if (self == object) {
+        return YES;
+    }
+    if (![object isKindOfClass:[SGDownloadTask class]]) {
+        return NO;
+    }
+    SGDownloadTask * task = (SGDownloadTask *)object;
+    if ([self.contentURL.absoluteString isEqualToString:task.contentURL.absoluteString]) {
+        return YES;
+    }
+    return NO;
+}
+
 - (void)setState:(SGDownloadTaskState)state
 {
     if (_state != state) {
