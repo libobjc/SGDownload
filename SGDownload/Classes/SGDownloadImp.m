@@ -14,6 +14,25 @@
 #import "SGDownloadTools.h"
 
 #import <objc/message.h>
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#elif TARGET_OS_IOS || TARGET_OS_TV
+#import <UIKit/UIKit.h>
+#endif
+
+
+#pragma mark - SGDownlaodManager Interface
+
+@interface SGDownloadManager: NSObject
+
++ (instancetype)manager;
+
+@property (nonatomic, strong) NSMutableArray <SGDownload *> * downloads;
+
+@end
+
+
+#pragma mark - SGDownlaod Interface
 
 NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
@@ -36,9 +55,54 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @end
 
-@implementation SGDownload
 
-static NSMutableArray <SGDownload *> * downloads = nil;
+#pragma mark - SGDownlaodManager implementation
+
+@implementation SGDownloadManager
+
++ (instancetype)manager
+{
+    static SGDownloadManager * manager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        manager = [[SGDownloadManager alloc] init];
+    });
+    return manager;
+}
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.downloads = [NSMutableArray array];
+        
+        NSNotificationName name = nil;
+#if TARGET_OS_OSX
+        name = NSApplicationWillTerminateNotification;
+#elif TARGET_OS_IOS || TARGET_OS_TV
+        name = UIApplicationWillTerminateNotification;
+#endif
+        if (name) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate) name:name object:nil];
+        }
+    }
+    return self;
+}
+
+- (void)applicationWillTerminate
+{
+    [[self.downloads copy] enumerateObjectsUsingBlock:^(SGDownload * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj invalidate];
+        [obj.taskQueue invalidate];
+        [obj.taskQueue archive];
+    }];
+}
+
+@end
+
+
+#pragma mark - SGDownload implementation
+
+@implementation SGDownload
 
 + (instancetype)download
 {
@@ -47,17 +111,13 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 + (instancetype)downloadWithIdentifier:(NSString *)identifier
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        downloads = [NSMutableArray array];
-    });
-    for (SGDownload * obj in downloads) {
+    for (SGDownload * obj in [SGDownloadManager manager].downloads) {
         if ([obj.identifier isEqualToString:identifier]) {
             return obj;
         }
     }
     SGDownload * obj = [[self alloc] initWithIdentifier:identifier];
-    [downloads addObject:obj];
+    [[SGDownloadManager manager].downloads addObject:obj];
     return obj;
 }
 
@@ -79,6 +139,22 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         self.running = YES;
         [self setupOperation];
     }
+}
+
+- (void)invalidate
+{
+    if (self.closed) return;
+    
+    self.closed = YES;
+    [self.taskQueue invalidate];
+    [self.taskTupleQueue cancelAllTupleResume:YES completionHandler:^(NSArray <SGDownloadTuple *> * tuples) {
+        [self.taskQueue archive];
+        [self.session invalidateAndCancel];
+        [self.downloadOperationQueue cancelAllOperations];
+        self.downloadOperation = nil;
+        [self.concurrentCondition broadcast];
+        [[SGDownloadManager manager].downloads removeObject:self];
+    }];
 }
 
 - (void)setupOperation
@@ -154,22 +230,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
             [sessionTask resume];
         }
     }
-}
-
-- (void)invalidate
-{
-    if (self.closed) return;
-    
-    self.closed = YES;
-    [self.taskQueue invalidate];
-    [self.taskTupleQueue cancelAllTupleResume:YES completionHandler:^(NSArray <SGDownloadTuple *> * tuples) {
-        [self.taskQueue archive];
-        [self.session invalidateAndCancel];
-        [self.downloadOperationQueue cancelAllOperations];
-        self.downloadOperation = nil;
-        [self.concurrentCondition broadcast];
-        [downloads removeObject:self];
-    }];
 }
 
 
