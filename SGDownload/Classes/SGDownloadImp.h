@@ -31,12 +31,15 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 @interface SGDownload : NSObject
 
 
-// instancetype
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
 + (instancetype)download;    // default download manager.
 + (instancetype)downloadWithIdentifier:(NSString *)identifier;
+
+
+- (void)run;
+- (void)invalidate;
 
 
 @property (nonatomic, copy, readonly) NSString * identifier;
@@ -46,25 +49,18 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
 
 
-// get task
 @property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;
 - (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting;
 - (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state;
-
 - (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;    // if return nil, there is no task of the contentURL.
 
 
-// add task
 - (void)addDownloadTask:(SGDownloadTask *)task;
 - (void)addDownloadTasks:(NSArray <SGDownloadTask *> *)tasks;
 
-
-// add suppend task
 - (void)addSuppendTask:(SGDownloadTask *)task;
 - (void)addSuppendTasks:(NSArray <SGDownloadTask *> *)tasks;
 
-
-// control task
 - (void)resumeAllTasks;
 - (void)resumeTask:(SGDownloadTask *)task;
 - (void)resumeTasks:(NSArray <SGDownloadTask *> *)tasks;
@@ -80,11 +76,6 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 - (void)cancelAllTasksAndDeleteFiles;
 - (void)cancelTaskAndDeleteFile:(SGDownloadTask *)task;
 - (void)cancelTasksAndDeleteFiles:(NSArray <SGDownloadTask *> *)tasks;
-
-
-// download live cycle
-- (void)run;
-- (void)invalidate;
 
 
 #if TARGET_OS_IOS || TARGET_OS_TV

@@ -19,16 +19,16 @@
 
 @implementation SGDownloadTask
 
-+ (instancetype)taskWithTitle:(NSString *)title contentURL:(NSURL *)contentURL fileURL:(NSURL *)fileURL
++ (instancetype)taskWithContentURL:(NSURL *)contentURL title:(NSString *)title fileURL:(NSURL *)fileURL
 {
-    return [[self alloc] initWithTitle:title contentURL:contentURL fileURL:fileURL];
+    return [[self alloc] initWithContentURL:contentURL title:title fileURL:fileURL];
 }
 
-- (instancetype)initWithTitle:(NSString *)title contentURL:(NSURL *)contentURL fileURL:(NSURL *)fileURL
+- (instancetype)initWithContentURL:(NSURL *)contentURL title:(NSString *)title fileURL:(NSURL *)fileURL
 {
     if (self = [super init]) {
-        self.title = title;
         self.contentURL = contentURL;
+        self.title = title;
         self.fileURL = fileURL;
         self.replaceHomeDirectoryIfNeed = YES;
     }

@@ -51,9 +51,9 @@
         SGDownloadTask * task = [self.download taskWithContentURL:contentURL];
         if (!task)
         {
-            task = [SGDownloadTask taskWithTitle:[NSString stringWithFormat:@"%d", i]
-                                      contentURL:contentURL
-                                         fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
+            task = [SGDownloadTask taskWithContentURL:contentURL
+                                                title:[NSString stringWithFormat:@"%d", i]
+                                              fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
             [tasks addObject:task];
         }
     }

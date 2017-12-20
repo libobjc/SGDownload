@@ -31,15 +31,17 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 
 @interface SGDownloadTask : NSObject
 
-+ (instancetype)taskWithTitle:(NSString *)title contentURL:(NSURL *)contentURL fileURL:(NSURL *)fileURL;
++ (instancetype)taskWithContentURL:(NSURL *)contentURL
+                             title:(NSString *)title
+                           fileURL:(NSURL *)fileURL;
 
 @property (nonatomic, weak) SGDownload * download;
 @property (nonatomic, weak) id <SGDownloadTaskDelegate> delegate;
 
 @property (nonatomic, assign, readonly) SGDownloadTaskState state;
 
-@property (nonatomic, copy, readonly) NSString * title;
 @property (nonatomic, copy, readonly) NSURL * contentURL;
+@property (nonatomic, copy, readonly) NSString * title;
 @property (nonatomic, copy, readonly) NSURL * fileURL;
 
 @property (nonatomic, assign, readonly) BOOL fileDidRemoved;
