@@ -322,10 +322,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         return;
     }
     
-    [tuple.downloadTask setBytesWritten:0
-                      totalBytesWritten:sessionTask.countOfBytesReceived
-              totalBytesExpectedToWrite:sessionTask.countOfBytesExpectedToReceive];
-    
     SGDownloadTaskState state;
     if (error) {
         NSData * resumeData = [error.userInfo objectForKey:NSURLSessionDownloadTaskResumeData];
@@ -383,6 +379,14 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         }
     }
     
+    NSError * error = nil;
+    unsigned long long fileSzie = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error] fileSize];
+    if (error || fileSzie == 0) {
+        tuple.downloadTask.error = [NSError errorWithDomain:@"download file is empty" code:-1 userInfo:nil];
+        [self.lastResumeLock unlock];
+        return;
+    }
+    
     NSString * filePath = tuple.downloadTask.fileURL.path;
     NSString * directoryPath = filePath.stringByDeletingLastPathComponent;
     
@@ -396,7 +400,6 @@ static NSMutableArray <SGDownload *> * downloads = nil;
         [[NSFileManager defaultManager] createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSError * error;
     [[NSFileManager defaultManager] moveItemAtPath:path toPath:filePath error:&error];
     tuple.downloadTask.error = error;
     [self.lastResumeLock unlock];

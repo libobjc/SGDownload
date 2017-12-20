@@ -93,29 +93,6 @@
     return NO;
 }
 
-- (void)setState:(SGDownloadTaskState)state
-{
-    if (_state != state) {
-        _state = state;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([self.delegate respondsToSelector:@selector(taskStateDidChange:)]) {
-                [self.delegate taskStateDidChange:self];
-            }
-            if ([self.download.delegate respondsToSelector:@selector(download:taskStateDidChange:)]) {
-                [self.download.delegate download:self.download taskStateDidChange:self];
-            }
-        });
-    }
-    if (_state != SGDownloadTaskStateFailured) {
-        self.error = nil;
-    }
-    if (_state == SGDownloadTaskStateFinished) {
-        self.resumeInfoData = nil;
-    }
-    self.resumeFileOffset = 0;
-    self.resumeExpectedTotalBytes = 0;
-}
-
 - (void)setBytesWritten:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
     self.bytesWritten = bytesWritten;
@@ -136,6 +113,31 @@
 {
     self.resumeFileOffset = resumeFileOffset;
     self.resumeExpectedTotalBytes = resumeExpectedTotalBytes;
+}
+
+- (void)setState:(SGDownloadTaskState)state
+{
+    if (_state != state) {
+        _state = state;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(taskStateDidChange:)]) {
+                [self.delegate taskStateDidChange:self];
+            }
+            if ([self.download.delegate respondsToSelector:@selector(download:taskStateDidChange:)]) {
+                [self.download.delegate download:self.download taskStateDidChange:self];
+            }
+        });
+    }
+    if (_state != SGDownloadTaskStateFailured) {
+        self.error = nil;
+    }
+    if (_state == SGDownloadTaskStateFinished) {
+        self.resumeInfoData = nil;
+        self.bytesWritten = 0;
+        self.totalBytesWritten = self.totalBytesExpectedToWrite;
+    }
+    self.resumeFileOffset = 0;
+    self.resumeExpectedTotalBytes = 0;
 }
 
 - (NSURL *)fileURL
