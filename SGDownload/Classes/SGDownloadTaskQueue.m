@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong) NSMutableArray <SGDownloadTask *> * tasks;
 
-@property (atomic, assign) BOOL needArchive;
+@property (nonatomic, assign) NSTimeInterval archiveTimeInterval;
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, assign) BOOL closed;
@@ -372,22 +372,20 @@
 
 - (void)tryArchive
 {
-    if (!self.needArchive) {
-        self.needArchive = YES;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    NSTimeInterval timeInterval = [NSDate date].timeIntervalSince1970;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (timeInterval > self.archiveTimeInterval) {
             [self archive];
-        });
-    }
+        }
+    });
 }
 
 - (void)archive
 {
-    if (self.needArchive) {
-        [self.condition lock];
-        [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
-        self.needArchive = NO;
-        [self.condition unlock];
-    }
+    [self.condition lock];
+    [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
+    self.archiveTimeInterval = [NSDate date].timeIntervalSince1970;
+    [self.condition unlock];
 }
 
 - (void)invalidate
@@ -412,7 +410,6 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self invalidate];
 }
 

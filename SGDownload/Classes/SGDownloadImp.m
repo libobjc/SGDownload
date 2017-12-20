@@ -89,6 +89,11 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)applicationWillTerminate
 {
     [[self.downloads copy] enumerateObjectsUsingBlock:^(SGDownload * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -156,15 +161,21 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
         [self.session invalidateAndCancel];
         [self.downloadOperationQueue cancelAllOperations];
         self.downloadOperation = nil;
+        [self.concurrentCondition lock];
         [self.concurrentCondition broadcast];
+        [self.concurrentCondition unlock];
         [[SGDownloadManager manager].downloads removeObject:self];
+        [self.invalidateConditaion lock];
         [self.invalidateConditaion broadcast];
+        [self.invalidateConditaion unlock];
     }];
     if (!async) {
         if (!self.invalidateConditaion) {
             self.invalidateConditaion = [[NSCondition alloc] init];
         }
+        [self.invalidateConditaion lock];
         [self.invalidateConditaion wait];
+        [self.invalidateConditaion unlock];
     }
 }
 

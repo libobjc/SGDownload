@@ -146,14 +146,16 @@
 {
     if (tuple) {
         [self cancelTuples:@[tuple] resume:resume completionHandler:^(NSArray<SGDownloadTuple *> * tuples) {
-            if (completionHandler && tuples.firstObject) {
+            if (completionHandler) {
                 completionHandler(tuples.firstObject);
             }
         }];
     } else {
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+        [self cancelTuples:nil resume:resume completionHandler:^(NSArray<SGDownloadTuple *> * tuples) {
+            if (completionHandler) {
+                completionHandler(tuples.firstObject);
+            }
+        }];
     }
 }
 
