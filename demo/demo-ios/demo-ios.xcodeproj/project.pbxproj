@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C040D2F1FEA08030049ACDD /* SGDownload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C040D301FEA08030049ACDD /* SGDownload.framework */; };
 		9C6C45411E83CD0C00183A53 /* DownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C6C45401E83CD0C00183A53 /* DownloadCell.m */; };
-		9C84EE421E83C98D00E79267 /* SGDownload.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C84EE411E83C98D00E79267 /* SGDownload.framework */; };
 		9CFA66861E83C8D3001A6D30 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA66851E83C8D3001A6D30 /* main.m */; };
 		9CFA66891E83C8D3001A6D30 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA66881E83C8D3001A6D30 /* AppDelegate.m */; };
 		9CFA668C1E83C8D3001A6D30 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CFA668B1E83C8D3001A6D30 /* ViewController.m */; };
@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C040D301FEA08030049ACDD /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C6C453F1E83CD0C00183A53 /* DownloadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadCell.h; sourceTree = "<group>"; };
 		9C6C45401E83CD0C00183A53 /* DownloadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadCell.m; sourceTree = "<group>"; };
 		9C84EE411E83C98D00E79267 /* SGDownload.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SGDownload.framework; path = ../../build/Debug/SGDownload.framework; sourceTree = "<group>"; };
@@ -38,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C84EE421E83C98D00E79267 /* SGDownload.framework in Frameworks */,
+				9C040D2F1FEA08030049ACDD /* SGDownload.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +49,7 @@
 		9C84EE401E83C98D00E79267 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9C040D301FEA08030049ACDD /* SGDownload.framework */,
 				9C84EE411E83C98D00E79267 /* SGDownload.framework */,
 			);
 			name = Frameworks;
@@ -122,7 +124,7 @@
 		9CFA66791E83C8D3001A6D30 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = Single;
 				TargetAttributes = {
 					9CFA66801E83C8D3001A6D30 = {
@@ -206,7 +208,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -214,7 +218,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -253,7 +261,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -261,7 +271,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

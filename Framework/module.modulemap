@@ -1,0 +1,5 @@
+framework module SGDownload {
+    umbrella header "SGDownload.h"
+    export *
+    module * { export * }
+}

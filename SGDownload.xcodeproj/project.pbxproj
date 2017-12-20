@@ -16,9 +16,11 @@
 		9C040D211FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
 		9C040D221FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
 		9C040D231FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
-		9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C040D271FEA06360049ACDD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C040D251FEA06360049ACDD /* Info.plist */; };
+		9C040D281FEA06360049ACDD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C040D251FEA06360049ACDD /* Info.plist */; };
+		9C040D2A1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C040D2B1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9C040D2C1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,9 +57,9 @@
 		9C040D181FEA032F0049ACDD /* SGDownloadTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTools.h; sourceTree = "<group>"; };
 		9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTaskPrivate.h; sourceTree = "<group>"; };
 		9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTools.m; sourceTree = "<group>"; };
+		9C040D251FEA06360049ACDD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Framework/Info.plist; sourceTree = SOURCE_ROOT; };
+		9C040D291FEA06B50049ACDD /* SGDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGDownload.h; path = Framework/SGDownload.h; sourceTree = SOURCE_ROOT; };
 		9C57A9881E7BBD0F0085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SGDownload.h; sourceTree = "<group>"; };
-		9C57A98C1E7BBD0F0085C9D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9C57A99C1E7BBD770085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C57A9A71E7BBD780085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C71838A1E7BBEC20062E6F4 /* SGDownloadImp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadImp.h; sourceTree = "<group>"; };
@@ -118,8 +120,8 @@
 		9C57A98A1E7BBD0F0085C9D4 /* SGDownload */ = {
 			isa = PBXGroup;
 			children = (
-				9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */,
-				9C57A98C1E7BBD0F0085C9D4 /* Info.plist */,
+				9C040D251FEA06360049ACDD /* Info.plist */,
+				9C040D291FEA06B50049ACDD /* SGDownload.h */,
 				9C7183891E7BBEAE0062E6F4 /* Classes */,
 			);
 			path = SGDownload;
@@ -152,6 +154,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C040D2A1FEA06B50049ACDD /* SGDownload.h in Headers */,
 				9CF24DB81E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC01E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
@@ -159,7 +162,6 @@
 				9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D1E1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839D1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
-				9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +169,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C040D2B1FEA06B50049ACDD /* SGDownload.h in Headers */,
 				9CF24DB91E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC11E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
@@ -174,7 +177,6 @@
 				9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D1F1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839E1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
-				9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +184,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C040D2C1FEA06B50049ACDD /* SGDownload.h in Headers */,
 				9CF24DBA1E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC21E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
@@ -189,7 +192,6 @@
 				9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D201FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839F1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
-				9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +305,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C040D271FEA06360049ACDD /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C040D281FEA06360049ACDD /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,11 +478,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = SGDownload/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "$(PROJECT_DIR)/Framework/module.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = com.libobjc.SGDownload;
 				PRODUCT_NAME = SGDownload;
 				SDKROOT = iphoneos;
@@ -497,11 +502,12 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = SGDownload/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Framework/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "$(PROJECT_DIR)/Framework/module.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = com.libobjc.SGDownload;
 				PRODUCT_NAME = SGDownload;
 				SDKROOT = iphoneos;
