@@ -93,7 +93,6 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
     [[self.downloads copy] enumerateObjectsUsingBlock:^(SGDownload * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj invalidate];
         [obj.taskQueue invalidate];
-        [obj.taskQueue archive];
     }];
 }
 

@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSMutableArray <SGDownloadTask *> * tasks;
 
+@property (atomic, assign) BOOL needArchive;
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, assign) BOOL closed;
@@ -53,7 +54,7 @@
         }
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (SGDownloadTask *)taskForContentURL:(NSURL *)contentURL
@@ -143,7 +144,7 @@
     [self.condition lock];
     task.state = state;
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (SGDownloadTask *)downloadTaskSync
@@ -209,7 +210,7 @@
         [self.condition signal];
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (void)addSuppendTask:(SGDownloadTask *)task
@@ -238,7 +239,7 @@
         }
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (void)resumeAllTasks
@@ -276,7 +277,7 @@
         [self.condition signal];
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (void)suspendAllTasks
@@ -307,7 +308,7 @@
         }
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (void)cancelAllTasks
@@ -338,7 +339,7 @@
         [self.tasks removeObject:task];
     }
     [self.condition unlock];
-    [self archive];
+    [self tryArchive];
 }
 
 - (void)deleteAllTaskFiles
@@ -365,15 +366,28 @@
     }
     [self.condition unlock];
     /*
-    [self archive];
+    [self tryArchive];
      */
+}
+
+- (void)tryArchive
+{
+    if (!self.needArchive) {
+        self.needArchive = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self archive];
+        });
+    }
 }
 
 - (void)archive
 {
-    [self.condition lock];
-    [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
-    [self.condition unlock];
+    if (self.needArchive) {
+        [self.condition lock];
+        [NSKeyedArchiver archiveRootObject:self.tasks toFile:self.archiverPath];
+        self.needArchive = NO;
+        [self.condition unlock];
+    }
 }
 
 - (void)invalidate
