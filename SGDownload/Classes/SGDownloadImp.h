@@ -45,7 +45,7 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 
 #if TARGET_OS_IOS || TARGET_OS_TV
 // background events
-+ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler;
++ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 #endif
 
 

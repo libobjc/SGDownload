@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C040D1B1FEA032F0049ACDD /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D181FEA032F0049ACDD /* SGDownloadTools.h */; };
+		9C040D1C1FEA032F0049ACDD /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D181FEA032F0049ACDD /* SGDownloadTools.h */; };
+		9C040D1D1FEA032F0049ACDD /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D181FEA032F0049ACDD /* SGDownloadTools.h */; };
+		9C040D1E1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */; };
+		9C040D1F1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */; };
+		9C040D201FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */; };
+		9C040D211FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
+		9C040D221FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
+		9C040D231FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
 		9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,15 +37,6 @@
 		9C7183A01E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
 		9C7183A11E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
 		9C7183A21E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
-		9CE9DF8E1E83646800457C57 /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9DF8C1E83646800457C57 /* SGDownloadTools.h */; };
-		9CE9DF8F1E83646800457C57 /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9DF8C1E83646800457C57 /* SGDownloadTools.h */; };
-		9CE9DF901E83646800457C57 /* SGDownloadTools.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9DF8C1E83646800457C57 /* SGDownloadTools.h */; };
-		9CE9DF911E83646800457C57 /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE9DF8D1E83646800457C57 /* SGDownloadTools.m */; };
-		9CE9DF921E83646800457C57 /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE9DF8D1E83646800457C57 /* SGDownloadTools.m */; };
-		9CE9DF931E83646800457C57 /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE9DF8D1E83646800457C57 /* SGDownloadTools.m */; };
-		9CE9E0171E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9E0151E839E8800457C57 /* SGDownloadTaskPrivate.h */; };
-		9CE9E0181E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9E0151E839E8800457C57 /* SGDownloadTaskPrivate.h */; };
-		9CE9E0191E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CE9E0151E839E8800457C57 /* SGDownloadTaskPrivate.h */; };
 		9CF24DB81E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
 		9CF24DB91E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
 		9CF24DBA1E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
@@ -52,6 +52,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C040D181FEA032F0049ACDD /* SGDownloadTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTools.h; sourceTree = "<group>"; };
+		9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTaskPrivate.h; sourceTree = "<group>"; };
+		9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTools.m; sourceTree = "<group>"; };
 		9C57A9881E7BBD0F0085C9D4 /* SGDownload.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SGDownload.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C57A98B1E7BBD0F0085C9D4 /* SGDownload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SGDownload.h; sourceTree = "<group>"; };
 		9C57A98C1E7BBD0F0085C9D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,9 +66,6 @@
 		9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTask.m; sourceTree = "<group>"; };
 		9C71839B1E7BCC580062E6F4 /* SGDownloadTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTaskQueue.h; sourceTree = "<group>"; };
 		9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTaskQueue.m; sourceTree = "<group>"; };
-		9CE9DF8C1E83646800457C57 /* SGDownloadTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGDownloadTools.h; path = "../../../../../project/single-framework/SGDownload/SGDownload/Classes/SGDownloadTools.h"; sourceTree = "<group>"; };
-		9CE9DF8D1E83646800457C57 /* SGDownloadTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SGDownloadTools.m; path = "../../../../../project/single-framework/SGDownload/SGDownload/Classes/SGDownloadTools.m"; sourceTree = "<group>"; };
-		9CE9E0151E839E8800457C57 /* SGDownloadTaskPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGDownloadTaskPrivate.h; path = "../../../../../project/single-framework/SGDownload/SGDownload/Classes/SGDownloadTaskPrivate.h"; sourceTree = "<group>"; };
 		9CF24DB61E811B930041032B /* SGDownloadTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTuple.h; sourceTree = "<group>"; };
 		9CF24DB71E811B930041032B /* SGDownloadTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTuple.m; sourceTree = "<group>"; };
 		9CF24DBE1E811C610041032B /* SGDownloadTupleQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTupleQueue.h; sourceTree = "<group>"; };
@@ -132,15 +132,15 @@
 				9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */,
 				9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */,
 				9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */,
-				9CE9E0151E839E8800457C57 /* SGDownloadTaskPrivate.h */,
+				9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */,
 				9C71839B1E7BCC580062E6F4 /* SGDownloadTaskQueue.h */,
 				9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */,
 				9CF24DB61E811B930041032B /* SGDownloadTuple.h */,
 				9CF24DB71E811B930041032B /* SGDownloadTuple.m */,
 				9CF24DBE1E811C610041032B /* SGDownloadTupleQueue.h */,
 				9CF24DBF1E811C610041032B /* SGDownloadTupleQueue.m */,
-				9CE9DF8C1E83646800457C57 /* SGDownloadTools.h */,
-				9CE9DF8D1E83646800457C57 /* SGDownloadTools.m */,
+				9C040D181FEA032F0049ACDD /* SGDownloadTools.h */,
+				9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -155,9 +155,9 @@
 				9CF24DB81E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC01E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
-				9CE9DF8E1E83646800457C57 /* SGDownloadTools.h in Headers */,
+				9C040D1B1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
 				9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
-				9CE9E0171E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */,
+				9C040D1E1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839D1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
 				9C57A98D1E7BBD0F0085C9D4 /* SGDownload.h in Headers */,
 			);
@@ -170,9 +170,9 @@
 				9CF24DB91E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC11E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838D1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
-				9CE9DF8F1E83646800457C57 /* SGDownloadTools.h in Headers */,
+				9C040D1C1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
 				9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
-				9CE9E0181E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */,
+				9C040D1F1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839E1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
 				9C57A9971E7BBD770085C9D4 /* SGDownload.h in Headers */,
 			);
@@ -185,9 +185,9 @@
 				9CF24DBA1E811B930041032B /* SGDownloadTuple.h in Headers */,
 				9CF24DC21E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838E1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
-				9CE9DF901E83646800457C57 /* SGDownloadTools.h in Headers */,
+				9C040D1D1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
 				9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
-				9CE9E0191E839E8800457C57 /* SGDownloadTaskPrivate.h in Headers */,
+				9C040D201FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839F1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
 				9C57A9A21E7BBD780085C9D4 /* SGDownload.h in Headers */,
 			);
@@ -256,7 +256,7 @@
 		9C57A97F1E7BBD0F0085C9D4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = single;
 				TargetAttributes = {
 					9C57A9871E7BBD0F0085C9D4 = {
@@ -321,7 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF24DBB1E811B930041032B /* SGDownloadTuple.m in Sources */,
-				9CE9DF911E83646800457C57 /* SGDownloadTools.m in Sources */,
+				9C040D211FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
 				9C7183A01E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC31E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
 				9C7183971E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
@@ -334,7 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF24DBC1E811B930041032B /* SGDownloadTuple.m in Sources */,
-				9CE9DF921E83646800457C57 /* SGDownloadTools.m in Sources */,
+				9C040D221FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
 				9C7183A11E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC41E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
 				9C7183981E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
@@ -347,7 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF24DBD1E811B930041032B /* SGDownloadTuple.m in Sources */,
-				9CE9DF931E83646800457C57 /* SGDownloadTools.m in Sources */,
+				9C040D231FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
 				9C7183A21E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC51E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
 				9C7183991E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
@@ -367,7 +367,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -375,7 +377,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -417,7 +423,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -425,7 +433,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

@@ -21,7 +21,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
 
 @property (nonatomic, strong) NSURLSession * session;
 @property (nonatomic, strong) NSOperationQueue * sessionDelegateQueue;
-@property (nonatomic, copy) void(^backgroundCompletionHandler)();
+@property (nonatomic, copy) void(^backgroundCompletionHandler)(void);
 
 @property (nonatomic, strong) SGDownloadTaskQueue * taskQueue;
 @property (nonatomic, strong) SGDownloadTupleQueue * taskTupleQueue;
@@ -313,7 +313,7 @@ static NSMutableArray <SGDownload *> * downloads = nil;
 
 #pragma mark - NSURLSessionDownloadDelegate
 
-+ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)())completionHandler
++ (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
 {
     SGDownload * download = [SGDownload downloadWithIdentifier:identifier];
     download.backgroundCompletionHandler = completionHandler;
