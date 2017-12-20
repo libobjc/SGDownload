@@ -42,12 +42,12 @@
     {
         NSString * URLString = [NSString stringWithFormat:@"http://oxl6mxy2t.bkt.clouddn.com/SGDownload/Okay-%d.mp4", i];
         NSURL * contentURL = [NSURL URLWithString:URLString];
-        SGDownloadTask * task = [self.download taskWithContentURL:contentURL];
+        SGDownloadTask * task = [self.download taskForContentURL:contentURL];
         if (!task)
         {
             task = [SGDownloadTask taskWithContentURL:contentURL
                                                 title:[NSString stringWithFormat:@"%d", i]
-                                              fileURL:[NSURL fileURLWithPath:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/%d.mp4", i]]]];
+                                              fileURL:[NSURL fileURLWithPath:[desPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.mp4", i]]]];
             [self.download addDownloadTask:task];
         }
     }
@@ -83,7 +83,7 @@
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return self.download.tasks.count;
+    return self.download.tasksForAll.count;
 }
 
 - (NSTableRowView *)tableView:(NSTableView *)tableView rowViewForRow:(NSInteger)row
@@ -95,7 +95,7 @@
         rowView.identifier = rowViewIdentifier;
         rowView.backgroundColor = [NSColor yellowColor];
     }
-    rowView.downloadTask = [self.download.tasks objectAtIndex:row];
+    rowView.downloadTask = [self.download.tasksForAll objectAtIndex:row];
     return rowView;
 }
 
@@ -132,7 +132,7 @@
 
 - (IBAction)tableViewDidDoubleClick:(NSTableView *)sender
 {
-    SGDownloadTask * task = [self.download.tasks objectAtIndex:sender.selectedRow];
+    SGDownloadTask * task = [self.download.tasksForAll objectAtIndex:sender.selectedRow];
     
     switch (task.state) {
         case SGDownloadTaskStateNone:
