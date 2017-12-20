@@ -47,7 +47,7 @@
     {
         NSString * URLString = [NSString stringWithFormat:@"http://oxl6mxy2t.bkt.clouddn.com/SGDownload/Okay-%d.mp4", i];
         NSURL * contentURL = [NSURL URLWithString:URLString];
-        SGDownloadTask * task = [self.download taskWithContentURL:contentURL];
+        SGDownloadTask * task = [self.download taskForContentURL:contentURL];
         if (!task)
         {
             task = [SGDownloadTask taskWithContentURL:contentURL
@@ -93,19 +93,19 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.download.tasks.count;
+    return self.download.tasksForAll.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DownloadCell * cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    cell.downloadTask = [self.download.tasks objectAtIndex:indexPath.row];
+    cell.downloadTask = [self.download.tasksForAll objectAtIndex:indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SGDownloadTask * task = [self.download.tasks objectAtIndex:indexPath.row];
+    SGDownloadTask * task = [self.download.tasksForAll objectAtIndex:indexPath.row];
     
     switch (task.state) {
         case SGDownloadTaskStateNone:
@@ -136,7 +136,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.download cancelTask:[self.download.tasks objectAtIndex:indexPath.row]];
+    [self.download cancelTask:[self.download.tasksForAll objectAtIndex:indexPath.row]];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
 }
 

@@ -13,6 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
+
+
 @class SGDownload;
 
 @protocol SGDownloadDelegate <NSObject>
@@ -23,9 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)download:(SGDownload *)download taskProgressDidChange:(SGDownloadTask *)task;
 
 @end
-
-
-extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 
 
 @interface SGDownload : NSObject
@@ -49,10 +50,10 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 @property (nonatomic, assign) NSUInteger maxConcurrentOperationCount;       // defalut is 1.
 
 
-@property (nonatomic, strong, readonly) NSArray <SGDownloadTask *> * tasks;
-- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting;
-- (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state;
-- (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;    // if return nil, there is no task of the contentURL.
+- (nullable SGDownloadTask *)taskForContentURL:(NSURL *)contentURL;
+- (nullable NSArray <SGDownloadTask *> *)tasksForAll;
+- (nullable NSArray <SGDownloadTask *> *)tasksForRunningOrWatting;
+- (nullable NSArray <SGDownloadTask *> *)tasksForState:(SGDownloadTaskState)state;
 
 
 - (void)addDownloadTask:(SGDownloadTask *)task;
@@ -79,7 +80,11 @@ extern NSString * const SGDownloadDefaultIdentifier;    // default identifier.
 
 
 #if TARGET_OS_IOS || TARGET_OS_TV
-// background events
+/**
+ *  Must be called when the AppDelegate receives the following callback.
+ *
+ *  - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+ */
 + (void)handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler;
 #endif
 

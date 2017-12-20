@@ -19,6 +19,8 @@
 
 @interface SGDownloadTaskQueue ()
 
+@property (nonatomic, strong) NSMutableArray <SGDownloadTask *> * tasks;
+
 @property (nonatomic, copy) NSString * archiverPath;
 @property (nonatomic, strong) NSCondition * condition;
 @property (nonatomic, assign) BOOL closed;
@@ -61,55 +63,7 @@
     [self archive];
 }
 
-- (NSMutableArray <SGDownloadTask *> *)tasksRunning
-{
-    [self.condition lock];
-    NSMutableArray * temp = [NSMutableArray array];
-    for (SGDownloadTask * obj in self.tasks) {
-        if (obj.state == SGDownloadTaskStateRunning) {
-            [temp addObject:obj];
-        }
-    }
-    if (temp.count <= 0) {
-        temp = nil;
-    }
-    [self.condition unlock];
-    return temp;
-}
-
-- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting
-{
-    [self.condition lock];
-    NSMutableArray * temp = [NSMutableArray array];
-    for (SGDownloadTask * obj in self.tasks) {
-        if (obj.state == SGDownloadTaskStateRunning || obj.state == SGDownloadTaskStateWaiting) {
-            [temp addObject:obj];
-        }
-    }
-    if (temp.count <= 0) {
-        temp = nil;
-    }
-    [self.condition unlock];
-    return temp;
-}
-
-- (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state
-{
-    [self.condition lock];
-    NSMutableArray * temp = [NSMutableArray array];
-    for (SGDownloadTask * obj in self.tasks) {
-        if (obj.state == state) {
-            [temp addObject:obj];
-        }
-    }
-    if (temp.count <= 0) {
-        temp = nil;
-    }
-    [self.condition unlock];
-    return temp;
-}
-
-- (SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL
+- (SGDownloadTask *)taskForContentURL:(NSURL *)contentURL
 {
     if (contentURL.absoluteString.length <= 0) return nil;
     [self.condition lock];
@@ -122,6 +76,71 @@
     }
     [self.condition unlock];
     return task;
+}
+
+- (NSArray <SGDownloadTask *> *)tasksForAll
+{
+    if (self.tasks.count > 0) {
+        return [self.tasks copy];
+    }
+    return nil;
+}
+
+- (NSArray <SGDownloadTask *> *)tasksForRunning
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == SGDownloadTaskStateRunning) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    if (temp.count > 0) {
+        return [temp copy];
+    }
+    return nil;
+}
+
+- (NSArray <SGDownloadTask *> *)tasksForRunningOrWatting
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == SGDownloadTaskStateRunning || obj.state == SGDownloadTaskStateWaiting) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    if (temp.count > 0) {
+        return [temp copy];
+    }
+    return nil;
+}
+
+- (NSArray <SGDownloadTask *> *)tasksForState:(SGDownloadTaskState)state
+{
+    [self.condition lock];
+    NSMutableArray * temp = [NSMutableArray array];
+    for (SGDownloadTask * obj in self.tasks) {
+        if (obj.state == state) {
+            [temp addObject:obj];
+        }
+    }
+    if (temp.count <= 0) {
+        temp = nil;
+    }
+    [self.condition unlock];
+    if (temp.count > 0) {
+        return [temp copy];
+    }
+    return nil;
 }
 
 - (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state

@@ -18,12 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, readonly) SGDownload * download;
 
-@property (nonatomic, strong, readonly) NSMutableArray <SGDownloadTask *> * tasks;
-- (NSMutableArray <SGDownloadTask *> *)tasksRunning;
-- (NSMutableArray <SGDownloadTask *> *)tasksRunningOrWatting;
-- (NSMutableArray <SGDownloadTask *> *)tasksWithState:(SGDownloadTaskState)state;
+- (nullable SGDownloadTask *)taskForContentURL:(NSURL *)contentURL;
+- (nullable NSArray <SGDownloadTask *> *)tasksForAll;
+- (nullable NSArray <SGDownloadTask *> *)tasksForRunning;
+- (nullable NSArray <SGDownloadTask *> *)tasksForRunningOrWatting;
+- (nullable NSArray <SGDownloadTask *> *)tasksForState:(SGDownloadTaskState)state;
 
-- (nullable SGDownloadTask *)taskWithContentURL:(NSURL *)contentURL;
 - (void)setTaskState:(SGDownloadTask *)task state:(SGDownloadTaskState)state;
 
 - (nullable SGDownloadTask *)downloadTaskSync;
@@ -35,15 +35,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)resumeAllTasks;
 - (void)resumeTask:(SGDownloadTask *)task;
-- (void)resumeTasks:(NSArray<SGDownloadTask *> *)tasks;
+- (void)resumeTasks:(NSArray <SGDownloadTask *> *)tasks;
 
 - (void)suspendAllTasks;
 - (void)suspendTask:(SGDownloadTask *)task;
-- (void)suspendTasks:(NSArray<SGDownloadTask *> *)tasks;
+- (void)suspendTasks:(NSArray <SGDownloadTask *> *)tasks;
 
 - (void)cancelAllTasks;
 - (void)cancelTask:(SGDownloadTask *)task;
-- (void)cancelTasks:(NSArray<SGDownloadTask *> *)tasks;
+- (void)cancelTasks:(NSArray <SGDownloadTask *> *)tasks;
 
 - (void)deleteAllTaskFiles;
 - (void)deleteTaskFile:(SGDownloadTask *)task;
