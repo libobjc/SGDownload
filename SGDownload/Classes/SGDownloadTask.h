@@ -11,7 +11,8 @@
 @class SGDownload;
 @class SGDownloadTask;
 
-typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
+typedef NS_ENUM(NSUInteger, SGDownloadTaskState)
+{
     SGDownloadTaskStateNone,
     SGDownloadTaskStateWaiting,
     SGDownloadTaskStateRunning,
@@ -34,6 +35,8 @@ typedef NS_ENUM(NSUInteger, SGDownloadTaskState) {
 + (instancetype)taskWithContentURL:(NSURL *)contentURL
                              title:(NSString *)title
                            fileURL:(NSURL *)fileURL;
+
+@property (nonatomic, strong) id <NSCoding> object;
 
 @property (nonatomic, weak) SGDownload * download;
 @property (nonatomic, weak) id <SGDownloadTaskDelegate> delegate;

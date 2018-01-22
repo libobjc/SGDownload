@@ -37,7 +37,9 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super init]) {
+    if (self = [super init])
+    {
+        self.object = [aDecoder decodeObjectForKey:@"object"];
         self.state = [[aDecoder decodeObjectForKey:@"state"] unsignedIntegerValue];
         
         self.title = [aDecoder decodeObjectForKey:@"title"];
@@ -60,6 +62,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [aCoder encodeObject:self.object forKey:@"object"];
     [aCoder encodeObject:@(self.state) forKey:@"state"];
     
     [aCoder encodeObject:self.title forKey:@"title"];
