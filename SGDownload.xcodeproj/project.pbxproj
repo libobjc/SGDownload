@@ -39,6 +39,12 @@
 		9C7183A01E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
 		9C7183A11E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
 		9C7183A21E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */; };
+		9CC08524201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CC08522201EF0FF00E4A769 /* SGDownloadTaskCorrect.h */; };
+		9CC08525201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CC08522201EF0FF00E4A769 /* SGDownloadTaskCorrect.h */; };
+		9CC08526201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CC08522201EF0FF00E4A769 /* SGDownloadTaskCorrect.h */; };
+		9CC08527201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC08523201EF0FF00E4A769 /* SGDownloadTaskCorrect.m */; };
+		9CC08528201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC08523201EF0FF00E4A769 /* SGDownloadTaskCorrect.m */; };
+		9CC08529201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CC08523201EF0FF00E4A769 /* SGDownloadTaskCorrect.m */; };
 		9CF24DB81E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
 		9CF24DB91E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
 		9CF24DBA1E811B930041032B /* SGDownloadTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = 9CF24DB61E811B930041032B /* SGDownloadTuple.h */; };
@@ -68,6 +74,8 @@
 		9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTask.m; sourceTree = "<group>"; };
 		9C71839B1E7BCC580062E6F4 /* SGDownloadTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTaskQueue.h; sourceTree = "<group>"; };
 		9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTaskQueue.m; sourceTree = "<group>"; };
+		9CC08522201EF0FF00E4A769 /* SGDownloadTaskCorrect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SGDownloadTaskCorrect.h; sourceTree = "<group>"; };
+		9CC08523201EF0FF00E4A769 /* SGDownloadTaskCorrect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTaskCorrect.m; sourceTree = "<group>"; };
 		9CF24DB61E811B930041032B /* SGDownloadTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTuple.h; sourceTree = "<group>"; };
 		9CF24DB71E811B930041032B /* SGDownloadTuple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGDownloadTuple.m; sourceTree = "<group>"; };
 		9CF24DBE1E811C610041032B /* SGDownloadTupleQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGDownloadTupleQueue.h; sourceTree = "<group>"; };
@@ -134,6 +142,8 @@
 				9C71838B1E7BBEC20062E6F4 /* SGDownloadImp.m */,
 				9C7183921E7BBF7B0062E6F4 /* SGDownloadTask.h */,
 				9C7183931E7BBF7B0062E6F4 /* SGDownloadTask.m */,
+				9CC08522201EF0FF00E4A769 /* SGDownloadTaskCorrect.h */,
+				9CC08523201EF0FF00E4A769 /* SGDownloadTaskCorrect.m */,
 				9C040D191FEA032F0049ACDD /* SGDownloadTaskPrivate.h */,
 				9C71839B1E7BCC580062E6F4 /* SGDownloadTaskQueue.h */,
 				9C71839C1E7BCC580062E6F4 /* SGDownloadTaskQueue.m */,
@@ -159,6 +169,7 @@
 				9CF24DC01E811C610041032B /* SGDownloadTupleQueue.h in Headers */,
 				9C71838C1E7BBEC20062E6F4 /* SGDownloadImp.h in Headers */,
 				9C040D1B1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
+				9CC08524201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */,
 				9C7183941E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D1E1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
 				9C71839D1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
@@ -176,6 +187,7 @@
 				9C040D1C1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
 				9C7183951E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D1F1FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
+				9CC08525201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */,
 				9C71839E1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +203,7 @@
 				9C040D1D1FEA032F0049ACDD /* SGDownloadTools.h in Headers */,
 				9C7183961E7BBF7B0062E6F4 /* SGDownloadTask.h in Headers */,
 				9C040D201FEA032F0049ACDD /* SGDownloadTaskPrivate.h in Headers */,
+				9CC08526201EF0FF00E4A769 /* SGDownloadTaskCorrect.h in Headers */,
 				9C71839F1E7BCC580062E6F4 /* SGDownloadTaskQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CF24DBB1E811B930041032B /* SGDownloadTuple.m in Sources */,
+				9CC08527201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */,
 				9C040D211FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
 				9C7183A01E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC31E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
@@ -339,6 +353,7 @@
 			files = (
 				9CF24DBC1E811B930041032B /* SGDownloadTuple.m in Sources */,
 				9C040D221FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
+				9CC08528201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */,
 				9C7183A11E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC41E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
 				9C7183981E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,
@@ -352,6 +367,7 @@
 			files = (
 				9CF24DBD1E811B930041032B /* SGDownloadTuple.m in Sources */,
 				9C040D231FEA032F0049ACDD /* SGDownloadTools.m in Sources */,
+				9CC08529201EF0FF00E4A769 /* SGDownloadTaskCorrect.m in Sources */,
 				9C7183A21E7BCC580062E6F4 /* SGDownloadTaskQueue.m in Sources */,
 				9CF24DC51E811C610041032B /* SGDownloadTupleQueue.m in Sources */,
 				9C7183991E7BBF7B0062E6F4 /* SGDownloadTask.m in Sources */,

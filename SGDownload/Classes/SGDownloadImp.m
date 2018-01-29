@@ -7,6 +7,7 @@
 //
 
 #import "SGDownloadImp.h"
+#import "SGDownloadTaskCorrect.h"
 #import "SGDownloadTaskPrivate.h"
 #import "SGDownloadTaskQueue.h"
 #import "SGDownloadTuple.h"
@@ -243,7 +244,7 @@ NSString * const SGDownloadDefaultIdentifier = @"SGDownloadDefaultIdentifier";
             
             NSURLSessionDownloadTask * sessionTask = nil;
             if (downloadTask.resumeInfoData.length > 0) {
-                sessionTask = [self.session downloadTaskWithResumeData:downloadTask.resumeInfoData];
+                sessionTask = [SGDownloadTaskCorrect downloadTaskWithSession:self.session resumeData:downloadTask.resumeInfoData];
             } else {
                 sessionTask = [self.session downloadTaskWithURL:downloadTask.contentURL];
             }
