@@ -16,8 +16,6 @@
 		9C040D211FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
 		9C040D221FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
 		9C040D231FEA032F0049ACDD /* SGDownloadTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C040D1A1FEA032F0049ACDD /* SGDownloadTools.m */; };
-		9C040D271FEA06360049ACDD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C040D251FEA06360049ACDD /* Info.plist */; };
-		9C040D281FEA06360049ACDD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C040D251FEA06360049ACDD /* Info.plist */; };
 		9C040D2A1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C040D2B1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C040D2C1FEA06B50049ACDD /* SGDownload.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C040D291FEA06B50049ACDD /* SGDownload.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -318,7 +316,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C040D271FEA06360049ACDD /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,7 +323,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C040D281FEA06360049ACDD /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
