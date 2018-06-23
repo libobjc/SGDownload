@@ -18,7 +18,7 @@
 {
 #if TARGET_OS_IOS
     float systemVersion = [UIDevice currentDevice].systemVersion.floatValue;
-    if (systemVersion >= 10.0 || systemVersion < 10.2)
+    if (systemVersion >= 10.0 && systemVersion < 10.2)
     {
         NSMutableDictionary * resumeDictionary = [self dictionaryWithData:resumeData];
         
