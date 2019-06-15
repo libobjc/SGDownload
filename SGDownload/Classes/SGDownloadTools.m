@@ -44,7 +44,11 @@ static NSString * HomeDirectoryRegexPattern = @"(\\w*-){4}(\\w*)";      // 98996
     NSError * error;
     NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"(\\w*-){4}(\\w*)" options:0 error:&error];
     if (!error) {
+#if !defined(TARGET_OS_SIMULATOR) || TARGET_OS_SIMULATOR
+        NSTextCheckingResult * match =[regex matchesInString:filePath options:NSMatchingReportCompletion range:NSMakeRange(0, filePath.length)].lastObject;
+#else
         NSTextCheckingResult * match = [regex firstMatchInString:filePath options:0 range:NSMakeRange(0, filePath.length)];
+#endif
         if (match) {
             NSString * currentName = NSHomeDirectory().lastPathComponent;
             filePath = [filePath stringByReplacingCharactersInRange:match.range withString:currentName];
